@@ -1,30 +1,25 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
+import { searchBooks } from "../../api/books";
 
 type SearchComponentProps = {
 }
 
 const SearchComponent: React.FC<SearchComponentProps> = (props) => {
 
-  // React Query - https://jsonplaceholder.typicode.com/users
   const [searchQuery, setSearchQuery] = useState("");
 
   const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: [`searchBook/results/${searchQuery}`],
-    queryFn: async (arg) => {
+    queryFn: async () => {
 
-      console.log("arg: ", arg, "searchQuery: ", searchQuery);
-
-      const cache = queryClient.getQueryData(["searchBook/results"]);
+      const cache = queryClient.getQueryData([`searchBook/results/${searchQuery}`]);
       if (cache) return cache;
 
-      const response = await axios.get("https://jsonplaceholder.typicode.com/users");
-
-      return response.data;
+      return (await searchBooks(searchQuery)).data;
     }
   });
 
@@ -41,30 +36,21 @@ const SearchComponent: React.FC<SearchComponentProps> = (props) => {
           <MagnifyingGlassIcon className="text-[#f8f8f9] hover:text-[#6d6f71] h-3 w-3 cursor-pointer transition-colors duration-300" />
         </button>
       </div>
-      <>
-        {
-          query.isLoading && (
-            <div className="flex items-center justify-center">
-              <p>Loading...</p>
+      <div className="z-10 absolute w-full h-fit bg-white p-3 gap-y-3">  
+      {
+        query.data?.books.map((book: Book) => {
+          return (
+            <div className="flex flex-row gap-x-3 hover:bg-gray-100 rouned-xl cursor-pointer">
+              <div className="w-[4rem] h-[4rem] bg-[#353535] rounded-lg"></div>
+              <div className="flex flex-col">
+                <h1 className="text-xl font-bold line-clamp-1">{ book.bookName }</h1>
+                <h2 className="text-sm font-medium tracking-tight">{ book.bookAuthor.authorFirstName + " " + book.bookAuthor.authorLastName }</h2>
+              </div>
             </div>
           )
-        }
-        {
-          query.isSuccess && (
-            <div className="flex items-center justify-center">
-              <p>Success!</p>
-              <p></p>
-            </div>
-          )
-        }
-        {
-          query.isError && (
-            <div className="flex items-center justify-center">
-              <p>Error!</p>
-            </div>
-          )
-        }
-      </>
+        })
+      }
+      </div>
     </>
   )
 
