@@ -1,4 +1,5 @@
 type Book = {
+  bookId: string,
   bookCategory: BookCategory,
   bookAuthor: BookAuthor,
   bookName: string,

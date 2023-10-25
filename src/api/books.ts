@@ -12,4 +12,8 @@ export function searchBooks(search: string) {
   return api.get(`/books/search/${search}`);
 }
 
+export function borrowBook(id: string) {
+  return api.post(`/books/${id}/borrow`);
+}
+
 // ToDo: Add Books
