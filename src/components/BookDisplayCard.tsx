@@ -1,10 +1,13 @@
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 type BookDisplayCardProps = {
   book: Book
 }
 
 const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
+
+  const navigate = useNavigate();
 
   return (
     <div className="relative w-full lg:w-fit bg-gray-200 flex justify-center rounded-xl">
@@ -55,12 +58,17 @@ const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
           </div>
 
           <div className="absolute bottom-0 right-0 mb-3 mr-3">
-            <button className="bg-green-500 text-gray-100 px-2 py-1 rounded-lg text-xs md:text-sm font-medium ml-2">View More</button>
+            <button onClick={viewBook} className="bg-green-500 text-gray-100 px-2 py-1 rounded-lg text-xs md:text-sm font-medium ml-2">View More</button>
           </div>
         </div>
       </div>
     </div>
   )
+
+  function viewBook() {
+    navigate(`/book/${book.bookId}`);
+
+  }
 }
 
 export default BookDisplayCard;
