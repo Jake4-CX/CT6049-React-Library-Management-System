@@ -8,6 +8,10 @@ import ErrorComponent from "../../components/global/error";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../../api/authentication";
 import toast from "react-hot-toast";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { setTokens, setUser } from "../../redux/features/user-slice";
+import { AxiosError, AxiosResponse } from "axios";
 
 type FormValues = {
   email: string,
@@ -27,6 +31,8 @@ const schema = z.object({
 
 const LoginPage: React.FC = () => {
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -41,11 +47,19 @@ const LoginPage: React.FC = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: loginUser,
     mutationKey: "loginUser",
-    onSuccess: (data: unknown) => {
+    onSuccess: (data: AxiosResponse) => {
+      const userObject: { data: { user: UserDataType, token: TokenDataType }, message: string } = data.data;
       console.log("Success: ", data);
       toast.success("Successfully logged in!");
+
+      dispatch(setUser(userObject.data.user));
+      dispatch(setTokens(userObject.data.token));
+
+      localStorage.setItem("user", JSON.stringify(userObject.data.user));
+      localStorage.setItem("accessToken", userObject.data.token.accessToken);
+      localStorage.setItem("refreshToken", userObject.data.token.refreshToken);
     },
-    onError: (error: unknown) => {
+    onError: (error: AxiosError) => {
       console.log("Error: ", error);
       toast.error("Failed to log in!");
     }
@@ -62,7 +76,6 @@ const LoginPage: React.FC = () => {
         </div>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form onSubmit={handleSubmit(onSubmit)}>
-
           <ErrorComponent errors={Object.values(errors).filter(Boolean) as FieldError[]} />
 
           <div className="mb-6 pt-6 rounded bg-gray-200">
