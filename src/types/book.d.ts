@@ -2,6 +2,8 @@ type Book = {
   bookId: string,
   bookCategory: BookCategory,
   bookAuthor: BookAuthor,
+  bookCategoryId: number,
+  bookAuthorId: number,
   bookName: string,
   bookISBN: string,
   bookDescription: string,
@@ -10,13 +12,13 @@ type Book = {
 }
 
 type BookCategory = {
-  id: number,
+  bookCategoryId: number,
   categoryName: string,
   categoryDescription: string
 }
 
 type BookAuthor = {
-  id: number,
+  bookAuthorId: number,
   authorFirstName: string,
   authorLastName: string
 }

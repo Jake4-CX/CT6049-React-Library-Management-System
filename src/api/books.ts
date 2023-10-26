@@ -16,4 +16,8 @@ export function borrowBook(id: string) {
   return api.post(`/books/${id}/borrow`);
 }
 
+export function createBook(book: Book) {
+  return api.post(`/books`, book);
+}
+
 // ToDo: Add Books

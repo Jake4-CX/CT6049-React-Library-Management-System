@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
-import DefaultLayout from "../layouts/defaultLayout";
+import DefaultLayout from "../../layouts/defaultLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getBook, borrowBook } from "../api/books";
+import { getBook, borrowBook } from "../../api/books";
 
 import { BsFillCalendarDateFill, BsPersonFill } from "react-icons/bs";
 import toast from "react-hot-toast";
