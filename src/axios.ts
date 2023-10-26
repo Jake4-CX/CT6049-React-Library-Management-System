@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getLocalStoredTokens, setLocalStoredTokens } from './api/authentication';
 
 const baseUrl = import.meta.env.VITE_API_ENDPOINT as string;
 
@@ -9,12 +10,15 @@ const api = axios.create({
 // Request interceptor for API calls
 api.interceptors.request.use(
   async config => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
-      config.headers['Accept'] = 'application/json';
-      config.headers['Content-Type'] = 'application/json';
+    const userTokens = getLocalStoredTokens();
+
+    if (userTokens) {
+      config.headers['Authorization'] = `Bearer ${userTokens.accessToken}`;
     }
+
+    config.headers['Accept'] = 'application/json';
+    config.headers['Content-Type'] = 'application/json';
+
     return config;
   },
   error => {
@@ -32,23 +36,22 @@ api.interceptors.response.use(
     // Check if the request has the `_retry` flag to avoid infinite loops
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('refreshToken');
+      const userTokens = getLocalStoredTokens();
 
       // If there's no refresh token, reject the request
-      if (!refreshToken) {
+      if ((!userTokens)) {
         return Promise.reject(error);
       }
 
       try {
         // Request a new token using the refresh token
-        const { data } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken });
-        localStorage.setItem('accessToken', data.accessToken);
-        
-        // Modify the original request to use the new access token and retry
+        const { data }: { data: TokenDataType } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken: userTokens.refreshToken });
+
+        setLocalStoredTokens(data);
         originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
         return api(originalRequest);
       } catch (refreshError) {
-        // Handle the error, you might want to redirect to login, clear tokens etc.
+        // Handle the error, e.g. redirect to login, clear tokens etc.
         console.error('Token refresh failed:', refreshError);
         return Promise.reject(error);
       }

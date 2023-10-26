@@ -9,7 +9,10 @@ import LoginPage from './views/authentication/login';
 import { Toaster } from 'react-hot-toast';
 import { ReduxProvider } from './redux/provider';
 import RequireAuth from './routes/features/RequireAuth';
-import BookPage from './views/book';
+import BookPage from './views/books/viewBook';
+import AppInitializer from './utils/appInitializer';
+import AdminDashboardPage from './views/dashboard/adminDashboard';
+import CreateBookPage from './views/books/createBook';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,11 +21,12 @@ const router = createBrowserRouter(
 
       {/* Authentication */}
       <Route path="/login" element={<LoginPage />} />
-      
+
       <Route path="/book/:bookId" element={<BookPage />} />
 
-      <Route element={<RequireAuth allowedRoles={['USER']}/>}>
-        <Route path="/dashboard" element={<h1>Welcome</h1>}/>
+      <Route element={<RequireAuth allowedRoles={['USER']} />}>
+        <Route path="/dashboard" element={<AdminDashboardPage />} />
+        <Route path="/books/add" element={<CreateBookPage />} />
       </Route>
     </Route>
   )
@@ -39,12 +43,12 @@ const queryClient = new QueryClient({
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ReduxProvider>
-      <QueryClientProvider client={queryClient}>
+  <ReduxProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppInitializer>
         <RouterProvider router={router} />
-        <Toaster position='top-right' />
-      </QueryClientProvider>
-    </ReduxProvider>
-  </React.StrictMode>,
+      </AppInitializer>
+      <Toaster position='top-right' />
+    </QueryClientProvider>
+  </ReduxProvider>,
 )

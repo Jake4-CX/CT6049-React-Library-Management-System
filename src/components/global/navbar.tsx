@@ -1,32 +1,16 @@
-import { XMarkIcon, Bars3Icon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon, Bars3Icon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchComponent from "./search";
-
-type PageType = {
-  title: string,
-  url: string,
-  icon?: React.ReactNode,
-  subPages?: PageType[]
-}
-
-const pageRoutes: PageType[] = [
-  {
-    title: "Home",
-    url: "/example",
-  },
-  {
-    title: "Example 2",
-    url: "/example2",
-  }
-]
-
+import { useAppSelector } from "../../redux/store";
 
 const NavbarComponent: React.FC = () => {
 
   const navigate = useNavigate();
 
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
+
+  const userRedux = useAppSelector((state) => state.userReduser.value.userData);
 
   return (
     <>
@@ -52,14 +36,27 @@ const NavbarComponent: React.FC = () => {
             <SearchComponent />
 
             {/* User Profile / Login */}
-            <div className="max-w-full flex items-center justify-center space-x-6 lg:space-y-0 h-10">
-              <button
-                className={`${isBurgerOpen ? "w-[100vw] lg:w-auto" : "hidden lg:block"} h-full flex items-center justify-center bg-[#353535] hover:bg-[#3f3f3f] text-white duration-300 rounded-lg space-x-3 px-4 py-2 lg:px-6`}
-                onClick={() => navigate("/login")}
-              >
-                <h3 className="text-sm font-semibold line-clamp-1">Login</h3>
-              </button>
-            </div>
+            {
+              userRedux ? (
+                <div className="max-w-full flex items-center justify-center space-x-6 lg:space-y-0 h-10">
+                  <button
+                    className={`${isBurgerOpen ? "w-[100vw] lg:w-auto" : "hidden lg:block"} h-full flex items-center justify-center bg-[#353535] hover:bg-[#3f3f3f] text-white duration-300 rounded-lg space-x-3 px-4 py-2 lg:px-6`}
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <h3 className="text-sm font-semibold line-clamp-1">Dashboard</h3>
+                  </button>
+                </div>
+              ) : (
+                <div className="max-w-full flex items-center justify-center space-x-6 lg:space-y-0 h-10">
+                  <button
+                    className={`${isBurgerOpen ? "w-[100vw] lg:w-auto" : "hidden lg:block"} h-full flex items-center justify-center bg-[#353535] hover:bg-[#3f3f3f] text-white duration-300 rounded-lg space-x-3 px-4 py-2 lg:px-6`}
+                    onClick={() => navigate("/login")}
+                  >
+                    <h3 className="text-sm font-semibold line-clamp-1">Login</h3>
+                  </button>
+                </div>
+              )
+            }
 
           </nav>
 

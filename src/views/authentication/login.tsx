@@ -56,8 +56,7 @@ const LoginPage: React.FC = () => {
       dispatch(setTokens(userObject.data.token));
 
       localStorage.setItem("user", JSON.stringify(userObject.data.user));
-      localStorage.setItem("accessToken", userObject.data.token.accessToken);
-      localStorage.setItem("refreshToken", userObject.data.token.refreshToken);
+      localStorage.setItem("tokens", JSON.stringify(userObject.data.token));
     },
     onError: (error: AxiosError) => {
       console.log("Error: ", error);
