@@ -1,7 +1,7 @@
 type Book = {
-  bookId: string,
-  bookCategory: BookCategory,
-  bookAuthor: BookAuthor,
+  bookId?: string,
+  bookCategory?: BookCategory,
+  bookAuthor?: BookAuthor,
   bookCategoryId: number,
   bookAuthorId: number,
   bookName: string,

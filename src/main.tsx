@@ -24,7 +24,7 @@ const router = createBrowserRouter(
 
       <Route path="/book/:bookId" element={<BookPage />} />
 
-      <Route element={<RequireAuth allowedRoles={['USER']} />}>
+      <Route element={<RequireAuth allowedRoles={['USER', 'ADMIN']} />}>
         <Route path="/dashboard" element={<AdminDashboardPage />} />
         <Route path="/books/add" element={<CreateBookPage />} />
       </Route>

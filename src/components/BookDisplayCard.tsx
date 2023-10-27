@@ -1,4 +1,5 @@
 import moment from "moment";
+import { BsFillCalendarDateFill, BsPersonFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 type BookDisplayCardProps = {
@@ -30,26 +31,14 @@ const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
           <div className="flex justify-between py-2">
             {/* Book publisher */}
             <div className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M2 4a2 2 0 012-2h12a2 2 0 012 2v2H2V4zm0 4h16v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8zm6 2a1 1 0 100 2h4a1 1 0 100-2h-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <p className="text-gray-500 text-sm">{book.bookAuthor.authorFirstName + " " + book.bookAuthor.authorLastName}</p>
+              <BsPersonFill className="h-4 w-4 my-auto mr-1 text-gray-500" />
+              <p className="text-gray-500 text-sm line-clamp-1">{book.bookAuthor.authorFirstName + " " + book.bookAuthor.authorLastName}</p>
             </div>
 
             {/* Book Published */}
             <div className="flex items-center ml-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M2 4a2 2 0 012-2h12a2 2 0 012 2v2H2V4zm0 4h16v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8zm6 2a1 1 0 100 2h4a1 1 0 100-2h-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <p className="text-gray-500 text-sm">{moment(book.bookPublishedDate).format("MMM YYYY")}</p>
+              <BsFillCalendarDateFill className="h-4 w-4 my-auto mr-1 text-gray-500" />
+              <p className="text-gray-500 text-sm line-clamp-1">{moment(book.bookPublishedDate).format("MMM YYYY")}</p>
             </div>
           </div>
 
