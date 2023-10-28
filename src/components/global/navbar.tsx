@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchComponent from "./search";
 import { useAppSelector } from "../../redux/store";
+import { PiBooksFill } from "react-icons/pi";
 
 const NavbarComponent: React.FC = () => {
 
@@ -17,8 +18,9 @@ const NavbarComponent: React.FC = () => {
       <section id="navbar" className="sticky flex items-center justify-center top-0 w-full bg-[#17181c]/95 backdrop-blur-sm py-4 z-10 min-h-[4.688rem]" aria-label="Site Header">
         <div className="flex flex-wrap items-center justify-between w-full max-w-full lg:w-5/6 xl:max-w-7xl px-[4%] mx-auto">
 
-          <div className="flex overflow-hidden cursor-pointer select-none">
-            <h2 className="font-extrabold tracking-tight text-white text-xl">
+          <div onClick={() => navigate("/")} className="flex overflow-hidden select-none space-x-1 cursor-pointer hover:bg-[#17181c] px-4 py-2 rounded-xl">
+            <PiBooksFill className="text-white w-8 h-8 opacity-90" />
+            <h2 className="font-bold tracking-tight text-white text-xl line-clamp-1 my-auto">
               Library Management System
             </h2>
           </div>
