@@ -2,11 +2,12 @@ import { BsPeopleFill } from "react-icons/bs";
 import DefaultLayout from "../../layouts/defaultLayout";
 import { PiBooksFill } from "react-icons/pi";
 import { FaBookOpen } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import CreateBookModal from "../../components/dashboard/modals/createBook";
 
 const AdminDashboardPage: React.FC = () => {
 
-  const navigate = useNavigate();
+  const [showCreateBookModal, setShowCreateBookModal] = useState(false);
 
   return (
     <DefaultLayout>
@@ -68,7 +69,7 @@ const AdminDashboardPage: React.FC = () => {
 
         {/* Buttons for "Add Book", "Add Category" */}
         <div className="flex flex-row space-x-3">
-          <button onClick={() => navigate("/books/add")} className="w-full bg-[#353535] text-white rounded-lg p-4">Add Book</button>
+          <button onClick={() => setShowCreateBookModal(true)} className="w-full bg-[#353535] text-white rounded-lg p-4">Add Book</button>
           <button className="w-full bg-[#353535] text-white rounded-lg p-4">Add Category</button>
         </div>
 
@@ -93,6 +94,7 @@ const AdminDashboardPage: React.FC = () => {
 
         </div>
       </div>
+      <CreateBookModal isOpen={showCreateBookModal} closeCallback={setShowCreateBookModal} />
     </DefaultLayout>
   )
 }

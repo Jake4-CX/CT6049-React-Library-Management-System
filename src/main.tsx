@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { Outlet, Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
@@ -12,7 +11,6 @@ import RequireAuth from './routes/features/RequireAuth';
 import BookPage from './views/books/viewBook';
 import AppInitializer from './utils/appInitializer';
 import AdminDashboardPage from './views/dashboard/adminDashboard';
-import CreateBookPage from './views/books/createBook';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +24,6 @@ const router = createBrowserRouter(
 
       <Route element={<RequireAuth allowedRoles={['USER', 'ADMIN']} />}>
         <Route path="/dashboard" element={<AdminDashboardPage />} />
-        <Route path="/books/add" element={<CreateBookPage />} />
       </Route>
     </Route>
   )
