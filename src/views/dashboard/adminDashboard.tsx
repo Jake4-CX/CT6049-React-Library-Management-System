@@ -6,6 +6,8 @@ import { useState } from "react";
 import CreateBookModal from "../../components/dashboard/modals/createBook";
 import CreateCategoryModal from "../../components/dashboard/modals/createCategory";
 import CreateAuthorModal from "../../components/dashboard/modals/createAuthor";
+import BookCirculationGraph from "../../components/dashboard/graphs/bookCirculation";
+import BooksByCategoryGraph from "../../components/dashboard/graphs/booksByCategory";
 
 const AdminDashboardPage: React.FC = () => {
 
@@ -84,7 +86,7 @@ const AdminDashboardPage: React.FC = () => {
             <h1 className="text-xl font-bold">Book Circulation</h1>
             <p className="text-sm font-light tracking-tight">Some subheading text</p>
             <div className="relative w-full h-[20rem] bg-gray-200 rounded-lg">
-              <p className="absolute bottom-2 right-2">Graph (Total Books, Reserved Books, Overdue Books)</p>
+              <BookCirculationGraph />
             </div>
           </div>
 
@@ -93,7 +95,7 @@ const AdminDashboardPage: React.FC = () => {
             <h1 className="text-xl font-bold">Books by Category</h1>
             <p className="text-sm font-light tracking-tight">Some subheading text</p>
             <div className="relative w-full h-[20rem] bg-gray-200 rounded-lg">
-              <p className="absolute bottom-2 right-2">Piechart showing categories</p>
+              <BooksByCategoryGraph />
             </div>
           </div>
 
