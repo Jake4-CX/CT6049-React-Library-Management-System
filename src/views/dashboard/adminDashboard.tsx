@@ -4,10 +4,14 @@ import { PiBooksFill } from "react-icons/pi";
 import { FaBookOpen } from "react-icons/fa";
 import { useState } from "react";
 import CreateBookModal from "../../components/dashboard/modals/createBook";
+import CreateCategoryModal from "../../components/dashboard/modals/createCategory";
+import CreateAuthorModal from "../../components/dashboard/modals/createAuthor";
 
 const AdminDashboardPage: React.FC = () => {
 
   const [showCreateBookModal, setShowCreateBookModal] = useState(false);
+  const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
+  const [showCreateAuthorModal, setShowCreateAuthorModal] = useState(false);
 
   return (
     <DefaultLayout>
@@ -68,9 +72,10 @@ const AdminDashboardPage: React.FC = () => {
         </div>
 
         {/* Buttons for "Add Book", "Add Category" */}
-        <div className="flex flex-row space-x-3">
+        <div className="flex flex-col sm:flex-row space-y-3 sm:space-x-3 sm:space-y-0">
           <button onClick={() => setShowCreateBookModal(true)} className="w-full bg-[#353535] text-white rounded-lg p-4">Add Book</button>
-          <button className="w-full bg-[#353535] text-white rounded-lg p-4">Add Category</button>
+          <button onClick={() => setShowCreateCategoryModal(true)} className="w-full bg-[#353535] text-white rounded-lg p-4">Add Category</button>
+          <button onClick={() => setShowCreateAuthorModal(true)} className="w-full bg-[#353535] text-white rounded-lg p-4">Add Author</button>
         </div>
 
         <div className="flex flex-col sm:flex-row w-full space-y-3 sm:space-y-0 sm:space-x-3">
@@ -95,6 +100,8 @@ const AdminDashboardPage: React.FC = () => {
         </div>
       </div>
       <CreateBookModal isOpen={showCreateBookModal} closeCallback={setShowCreateBookModal} />
+      <CreateCategoryModal isOpen={showCreateCategoryModal} closeCallback={setShowCreateCategoryModal} />
+      <CreateAuthorModal isOpen={showCreateAuthorModal} closeCallback={setShowCreateAuthorModal} />
     </DefaultLayout>
   )
 }

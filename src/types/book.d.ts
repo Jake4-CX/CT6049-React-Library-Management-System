@@ -12,13 +12,13 @@ type Book = {
 }
 
 type BookCategory = {
-  bookCategoryId: number,
+  bookCategoryId?: number,
   categoryName: string,
   categoryDescription: string
 }
 
 type BookAuthor = {
-  bookAuthorId: number,
+  bookAuthorId?: number,
   authorFirstName: string,
   authorLastName: string
 }

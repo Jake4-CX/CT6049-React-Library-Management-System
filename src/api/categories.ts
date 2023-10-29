@@ -11,3 +11,7 @@ export function getCategory(id: string) {
 export function searchCategories(search: string) {
   return api.get(`/categories/search/${search}`);
 }
+
+export function createCategory(data: BookCategory) {
+  return api.post(`/categories`, data);
+}

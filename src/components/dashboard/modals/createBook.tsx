@@ -1,7 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
-import { HiTrash } from "react-icons/hi";
 import { z } from "zod";
 import { getAuthors } from "../../../api/authors";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -134,7 +133,7 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
 
         <div className="bg-gray-50 px-6 flex rounded-t-xl">
           <div className="w-full flex justify-between items-center mb-3 mt-4">
-            <h1 className="text-lg font-medium leading-none text-gray-700">Create Book</h1>
+            <h1 className="text-base font-medium leading-none text-gray-700">Create Book</h1>
             <button onClick={() => (props.closeCallback(false))}>
               <FaTimes className="h-5 w-5 text-[#6d6f71] hover:text-[#6d6f71]/80 opacity-75 duration-300" />
             </button>
@@ -206,7 +205,16 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
 
         <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-xl">
           <button onClick={handleSubmit(onSubmit)} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none transition duration-300 sm:ml-3 sm:w-auto sm:text-sm">
-            Create Book
+            {
+              isLoading ? (
+                <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+              ) : (
+                "Create Book"
+              )
+            }
           </button>
           <button onClick={() => props.closeCallback(false)} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition duration-300 sm:mt-0 sm:w-auto sm:text-sm">
             Cancel
