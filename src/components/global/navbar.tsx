@@ -15,7 +15,7 @@ const NavbarComponent: React.FC = () => {
 
   return (
     <>
-      <section id="navbar" className="sticky flex items-center justify-center top-0 w-full bg-[#17181c]/95 backdrop-blur-sm py-4 z-10 min-h-[4.688rem]" aria-label="Site Header">
+      <section id="navbar" className="sticky top-0 flex items-center justify-center w-full bg-[#17181c]/95 backdrop-blur-sm py-4 z-10 min-h-[4.688rem]" aria-label="Site Header">
         <div className="flex flex-wrap items-center justify-between w-full max-w-full lg:w-5/6 xl:max-w-7xl px-[4%] mx-auto">
 
           <div onClick={() => navigate("/")} className="flex overflow-hidden select-none space-x-1 cursor-pointer hover:bg-[#17181c] px-4 py-2 rounded-xl">
