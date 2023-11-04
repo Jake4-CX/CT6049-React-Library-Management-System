@@ -8,6 +8,7 @@ import CreateCategoryModal from "../../components/dashboard/modals/createCategor
 import CreateAuthorModal from "../../components/dashboard/modals/createAuthor";
 import BookCirculationGraph from "../../components/dashboard/graphs/bookCirculation";
 import BooksByCategoryGraph from "../../components/dashboard/graphs/booksByCategory";
+import OverdueTable from "../../components/dashboard/tables/overdueTable";
 
 const AdminDashboardPage: React.FC = () => {
 
@@ -100,6 +101,24 @@ const AdminDashboardPage: React.FC = () => {
           </div>
 
         </div>
+
+        {/* Table of Overdue Books */}
+        <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
+          <div className="w-full">
+            <h1 className="text-xl font-bold">Current Overdue loans</h1>
+            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+          </div>
+          <OverdueTable />
+        </div>
+
+        {/* My Loans table */}
+        <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
+          <div className="w-full">
+            <h1 className="text-xl font-bold">My Loans</h1>
+            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+          </div>
+        </div>
+
       </div>
       <CreateBookModal isOpen={showCreateBookModal} closeCallback={setShowCreateBookModal} />
       <CreateCategoryModal isOpen={showCreateCategoryModal} closeCallback={setShowCreateCategoryModal} />

@@ -22,3 +22,11 @@ type BookAuthor = {
   authorFirstName: string,
   authorLastName: string
 }
+
+type LoanedBook = {
+  loanedBookId?: string,
+  loanedAt: Date,
+  returnedAt?: Date,
+  book: Book,
+  user: UserDataType
+}

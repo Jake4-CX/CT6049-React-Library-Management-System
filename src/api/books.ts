@@ -13,11 +13,17 @@ export function searchBooks(search: string) {
 }
 
 export function borrowBook(id: string) {
-  return api.post(`/books/${id}/borrow`);
+  return api.get(`/books/${id}/borrow`);
 }
 
 export function createBook(book: Book) {
   return api.post(`/books`, book);
 }
 
-// ToDo: Add Books
+export function getOverdueBooks() {
+  return api.get(`/loans/overdue`);
+}
+
+export function getBorrowedBooks() {
+  return api.get(`/loans/borrowed`);
+}
