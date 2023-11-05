@@ -9,6 +9,7 @@ import CreateAuthorModal from "../../components/dashboard/modals/createAuthor";
 import BookCirculationGraph from "../../components/dashboard/graphs/bookCirculation";
 import BooksByCategoryGraph from "../../components/dashboard/graphs/booksByCategory";
 import OverdueTable from "../../components/dashboard/tables/overdueTable";
+import MyLoansTable from "../../components/dashboard/tables/myLoansTable";
 
 const AdminDashboardPage: React.FC = () => {
 
@@ -117,6 +118,7 @@ const AdminDashboardPage: React.FC = () => {
             <h1 className="text-xl font-bold">My Loans</h1>
             <p className="text-sm font-light tracking-tight">Some subheading text</p>
           </div>
+          <MyLoansTable />
         </div>
 
       </div>
