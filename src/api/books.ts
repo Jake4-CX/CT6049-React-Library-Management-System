@@ -19,11 +19,3 @@ export function borrowBook(id: string) {
 export function createBook(book: Book) {
   return api.post(`/books`, book);
 }
-
-export function getOverdueBooks() {
-  return api.get(`/loans/overdue`);
-}
-
-export function getBorrowedBooks() {
-  return api.get(`/loans/borrowed`);
-}

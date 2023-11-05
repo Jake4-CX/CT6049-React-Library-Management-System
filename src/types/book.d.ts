@@ -28,5 +28,11 @@ type LoanedBook = {
   loanedAt: Date,
   returnedAt?: Date,
   book: Book,
-  user: UserDataType
+  user: UserDataType,
+  finePaid?: FinePaid
+}
+
+type FinePaid = {
+  paidAt: Date,
+  paidAmount: number
 }

@@ -3,10 +3,12 @@ import { BsFillCalendarDateFill, BsPersonFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 type BookDisplayCardProps = {
-  book: Book
+  book: { book: Book, booksLoaned: number }
 }
 
-const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
+const BookDisplayCard: React.FC<BookDisplayCardProps> = (props) => {
+
+  const { book, booksLoaned } = props.book;
 
   const navigate = useNavigate();
 
@@ -21,9 +23,17 @@ const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
             alt="book-card"
           />
           {/* Book Category Tag */}
-          <div className="bottom-0 right-0 mb-2 mr-2 px-2 rounded-lg absolute bg-yellow-500 text-gray-100 text-xs font-medium">
-            { book.bookQuantity } left
-          </div>
+          {
+            (book.bookQuantity - booksLoaned) > 0 ? (
+              <div className="bottom-0 right-0 mb-2 mr-2 px-2 rounded-lg absolute bg-yellow-500 text-gray-100 text-xs font-medium">
+                {book.bookQuantity - booksLoaned} left
+              </div>
+            ) : (
+              <div className="bottom-0 right-0 mb-2 mr-2 px-2 rounded-lg absolute bg-red-500 text-gray-100 text-xs font-medium">
+                Out of stock
+              </div>
+            )
+          }
         </div>
         <div className="w-full h-[12rem] px-2 py-1">
           <h2 className="text-lg font-bold line-clamp-2 pr-2">{book.bookName}</h2>
@@ -32,7 +42,7 @@ const BookDisplayCard: React.FC<BookDisplayCardProps> = ({ book }) => {
             {/* Book publisher */}
             <div className="flex items-center">
               <BsPersonFill className="h-4 w-4 my-auto mr-1 text-gray-500" />
-              <p className="text-gray-500 text-sm line-clamp-1">{book.bookAuthor.authorFirstName + " " + book.bookAuthor.authorLastName}</p>
+              <p className="text-gray-500 text-sm line-clamp-1">{book.bookAuthor?.authorFirstName + " " + book.bookAuthor?.authorLastName}</p>
             </div>
 
             {/* Book Published */}

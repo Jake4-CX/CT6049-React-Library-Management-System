@@ -1,23 +1,17 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import BookDisplayCard from "../components/BookDisplayCard";
 import DefaultLayout from "../layouts/defaultLayout";
 import { getBooks } from "../api/books";
 
 const LandingPage: React.FC = () => {
 
-  const queryClient = useQueryClient();
-
   const query = useQuery({
     queryKey: ["books/landingBooks"],
+    cacheTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
     queryFn: async () => {
 
-      const cache: { books: Book[] } | undefined = queryClient.getQueryData(["books/landingBooks"]);
-
-      if (cache) {
-        return cache;
-      }
-      const books = ((await getBooks()).data).books as Book[];
-
+      const books = ((await getBooks()).data).books as { book: Book, booksLoaned: number }[];
 
       return {books};
     }

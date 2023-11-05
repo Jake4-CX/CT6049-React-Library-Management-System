@@ -1,8 +1,8 @@
 import { useReactTable, type ColumnDef, getCoreRowModel, flexRender, getPaginationRowModel } from "@tanstack/react-table";
 import { useNavigate } from "react-router-dom";
 import { HiLink } from "react-icons/hi";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getOverdueBooks } from "../../../api/books";
+import { useQuery } from "@tanstack/react-query";
+import { getOverdueBooks } from "../../../api/bookLoans";
 import moment from "moment";
 import BookCategoryBadge from "../../global/badges/bookCategoryBadge";
 import DaysOverdueBadge from "../../global/badges/daysOverdueBadge";
@@ -12,17 +12,11 @@ const OverdueTable: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const queryClient = useQueryClient();
-
   const overdueBooks = useQuery({
     queryKey: ["overdueBooks"],
+    cacheTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
     queryFn: async () => {
-
-      const cache: LoanedBook[] | undefined = queryClient.getQueryData(["overdueBooks"]);
-
-      if (cache) {
-        return cache;
-      }
 
       return await ((await getOverdueBooks()).data).overdueBooks as LoanedBook[];
     }
