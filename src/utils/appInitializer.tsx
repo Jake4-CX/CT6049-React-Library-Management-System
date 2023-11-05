@@ -2,7 +2,6 @@ import React, { useEffect, ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import { setUser, setTokens } from '../redux/features/user-slice';
 import { getLocalStoredTokens, validateUserAccessToken } from '../api/authentication';
-// Additional imports if needed
 
 type AppInitializerProps = {
   children: ReactNode;
