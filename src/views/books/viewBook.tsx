@@ -84,7 +84,7 @@ const BookPage: React.FC = () => {
   });
 
   return (
-    <DefaultLayout>
+    <DefaultLayout className="mt-3">
       <div className="w-full md:w-[44rem] xl:w-[56rem] space-y-3">
         {
           query.data && query.data.loanedBook && (

@@ -18,7 +18,7 @@ const AdminDashboardPage: React.FC = () => {
   const [showCreateAuthorModal, setShowCreateAuthorModal] = useState(false);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout className="mt-3">
       <div className="w-full md:w-[44rem] xl:w-[56rem] space-y-3 bg-gray-200 p-4 rounded-lg">
         <div className="">
           <h1 className="text-lg font-bold">Dashboard</h1>

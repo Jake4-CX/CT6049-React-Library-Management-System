@@ -1,30 +1,20 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { searchBooks } from "../../api/books";
 import { useNavigate } from "react-router-dom";
 
-type SearchComponentProps = {
-}
-
-const SearchComponent: React.FC<SearchComponentProps> = (props) => {
+const SearchComponent: React.FC = () => {
 
   const navigate = useNavigate();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Book[]>([]);
 
-  const queryClient = useQueryClient();
-
-  const query = useQuery({
+  useQuery({
     queryKey: [`searchBook/results/${searchQuery}`],
+    cacheTime: 1000 * 60 * 5, // 5 minutes
     queryFn: async () => {
-
-      const cache = queryClient.getQueryData([`searchBook/results/${searchQuery}`]);
-      if (cache) {
-        setSearchResults(cache.books as Book[]);
-        return cache;
-      }
 
       const searchResults = (await searchBooks(searchQuery)).data;
       setSearchResults(searchResults.books);
@@ -51,13 +41,13 @@ const SearchComponent: React.FC<SearchComponentProps> = (props) => {
           searchResults.length > 0 && (
             <div className="z-10 absolute w-full h-fit bg-gray-50/95 rounded-b-lg p-3 gap-y-3 mt-1">
               {
-                searchResults.map((book: Book) => {
+                searchResults.map((book: Book, index) => {
                   return (
-                    <div onClick={() => viewBook(book.bookId)} className="flex flex-row gap-x-3 hover:bg-gray-100 rounded-xl cursor-pointer p-2">
+                    <div key={index} onClick={() => viewBook(book.bookId!)} className="flex flex-row gap-x-3 hover:bg-gray-100 rounded-xl cursor-pointer p-2">
                       <div className="w-[3rem] h-[3rem] bg-[#353535] rounded-lg"></div>
                       <div className="flex flex-col">
                         <h1 className="text-xl font-bold line-clamp-1">{book.bookName}</h1>
-                        <h2 className="text-sm font-medium tracking-tight">{book.bookAuthor.authorFirstName + " " + book.bookAuthor.authorLastName}</h2>
+                        <h2 className="text-sm font-medium tracking-tight">{book.bookAuthor?.authorFirstName + " " + book.bookAuthor?.authorLastName}</h2>
                       </div>
                     </div>
                   )
