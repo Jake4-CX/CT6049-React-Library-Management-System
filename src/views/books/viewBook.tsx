@@ -105,8 +105,8 @@ const BookPage: React.FC = () => {
 
           <div className="relative w-full sm:w-2/3 h-[21rem]">
             <img
-              src="/image-placeholder_3x2.svg"
-              className="min-h-full md:max-h-60 object-cover select-none rounded-lg"
+              src={query.data?.book.bookThumbnailURL || "/image-placeholder_3x2.svg"}
+              className="w-full h-full sm:max-h-fit object-cover select-none rounded-lg"
               alt="book-card"
             />
             <div className="absolute top-0 right-0 mt-2 mr-2 px-2 rounded-lg bg-yellow-500 text-gray-100 text-xs font-medium">

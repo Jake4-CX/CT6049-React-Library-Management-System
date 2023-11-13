@@ -14,13 +14,14 @@ const BookDisplayCard: React.FC<BookDisplayCardProps> = (props) => {
 
   return (
     <div className="relative w-full lg:w-fit bg-gray-200 flex justify-center rounded-xl">
-      <div className="flex flex-col sm:flex-row lg:flex-col lg:w-52 lg:pb-2 bg-white rounded-xl shadow-xl">
-        <div className="relative w-full sm:w-2/3 md:w-1/2 lg:w-full">
+      <div className="flex flex-col w-full sm:flex-row lg:flex-col lg:w-52 lg:pb-2 bg-white rounded-xl shadow-xl">
+        <div className="relative w-full max-h-60 sm:h-full lg:max-h-32 sm:w-2/3 md:w-1/2 lg:w-full">
           {/* Book Image */}
           <img
-            src="/image-placeholder_3x2.svg"
-            className="min-h-full md:max-h-60 object-cover select-none rounded-t-xl sm:rounded-tr-none sm:rounded-l-xl lg:rounded-bl-none lg:rounded-t-xl"
+            src={props.book.book.bookThumbnailURL || "/image-placeholder_3x2.svg"}
+            className="h-full w-full object-cover select-none rounded-t-xl sm:rounded-tr-none sm:rounded-l-xl lg:rounded-bl-none lg:rounded-t-xl cursor-pointer"
             alt="book-card"
+            onClick={() => navigate("/book/" + props.book.book.bookId)}
           />
           {/* Book Category Tag */}
           {

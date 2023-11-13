@@ -9,6 +9,7 @@ type Book = {
   bookDescription: string,
   bookQuantity: number,
   bookPublishedDate: Date,
+  bookThumbnailURL?: string,
 }
 
 type BookCategory = {

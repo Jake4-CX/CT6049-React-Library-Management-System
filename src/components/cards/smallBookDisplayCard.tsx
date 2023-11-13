@@ -16,8 +16,8 @@ const SmallBookDisplayCard: React.FC<SmallBookDisplayCardProps> = (props) => {
         <div className="relative w-full lg:w-full">
           {/* Book Image */}
           <img
-            src="/image-placeholder_3x2.svg"
-            className="min-h-full h-36 object-cover select-none rounded-t-xl cursor-pointer"
+            src={props.book.bookThumbnailURL || "/image-placeholder_3x2.svg"}
+            className="w-full min-h-full h-36 object-cover select-none rounded-t-xl cursor-pointer"
             alt="book-card"
             onClick={() => navigate("/book/" + props.book.bookId)}
           />
