@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import BookDisplayCard from "../components/BookDisplayCard";
+import BookDisplayCard from "../components/cards/bookDisplayCard";
 import DefaultLayout from "../layouts/defaultLayout";
 import { getBooks } from "../api/books";
 import HeroSection from "../components/landing/hero";

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SearchComponent from "./search";
 import { useAppSelector } from "../../redux/store";
 import { PiBooksFill } from "react-icons/pi";
+import ToggleDatabaseComponent from "./toggleDatabase";
 
 const NavbarComponent: React.FC = () => {
 
@@ -59,6 +60,8 @@ const NavbarComponent: React.FC = () => {
                 </div>
               )
             }
+
+            <ToggleDatabaseComponent />
 
           </nav>
 

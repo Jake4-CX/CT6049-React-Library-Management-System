@@ -11,9 +11,11 @@ const api = axios.create({
 api.interceptors.request.use(
   async config => {
     const userTokens = getLocalStoredTokens();
+    const databaseType = (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL";
 
     if (userTokens) {
       config.headers['Authorization'] = `Bearer ${userTokens.accessToken}`;
+      // config.headers['Database-Type'] = databaseType;
     }
 
     config.headers['Accept'] = 'application/json';
