@@ -9,6 +9,8 @@ import moment from "moment";
 import BookCategoryBadge from "../../components/global/badges/bookCategoryBadge";
 import { AxiosError } from "axios";
 import { payOverdueBookLoan, returnBookLoan } from "../../api/bookLoans";
+import MoreFromAuthor from "../../components/books/moreFromAuthor";
+import MoreFromCategory from "../../components/books/moreFromCategory";
 
 const BookPage: React.FC = () => {
 
@@ -202,7 +204,7 @@ const BookPage: React.FC = () => {
             </div>
           </div>
         </div >
-        <div className="w-full bg-gray-200 rounded-lg p-4">
+        <div className="h-[12rem] w-full bg-gray-200 rounded-lg p-4">
           <p>{query.data?.book.bookDescription}</p>
 
           <hr className="my-2 border-x-[1px] border-gray-300" />
@@ -218,7 +220,10 @@ const BookPage: React.FC = () => {
           </div>
 
         </div>
-      </div >
+
+        <MoreFromAuthor author={query.data?.book.bookAuthor} />
+        <MoreFromCategory category={query.data?.book.bookCategory} />
+      </div>
     </DefaultLayout >
   )
 

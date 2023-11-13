@@ -15,3 +15,7 @@ export function searchAuthors(search: string) {
 export function createAuthor(data: BookAuthor) {
   return api.post(`/authors`, data);
 }
+
+export function getBooksFromAuthor(id: string) {
+  return api.get(`/authors/${id}/books`);
+}
