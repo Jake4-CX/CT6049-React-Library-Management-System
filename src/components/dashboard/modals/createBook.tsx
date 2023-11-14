@@ -19,6 +19,7 @@ type FormValues = {
   bookAuthorId: number,
   bookCategoryId: number,
   bookThumbnailURL: string,
+  bookPublishedDate: Date
 }
 
 const schema = z.object({
@@ -39,7 +40,10 @@ const schema = z.object({
     .min(1, "Book category is required"),
   bookThumbnailURL: z.string()
     .url("Book thumbnail URL must be a valid URL")
-    .optional()
+    .optional(),
+  bookPublishedDate: z.date()
+    .min(new Date(1900, 1, 1), "Book published date must be greater than 1900")
+    .max(new Date(), "Book published date must be less than today")
 });
 
 type CreateBookModalProps = {
@@ -110,7 +114,7 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       bookAuthorId: data.bookAuthorId,
       bookCategoryId: data.bookCategoryId,
       bookThumbnailURL: data.bookThumbnailURL,
-      bookPublishedDate: new Date()
+      bookPublishedDate: data.bookPublishedDate
     });
   }
 
@@ -153,21 +157,34 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
                 (!bookCategories.isLoading) && (!bookAuthors.isLoading) ? (
                   <form className="w-full space-y-3">
                     <ErrorComponent errors={Object.values(errors).filter(Boolean) as FieldError[]} />
-                    <div className="flex flex-col space-y-1">
-                      <label htmlFor="bookName" className="text-sm font-medium tracking-tight">Book Name</label>
-                      <input type="text" id="bookName" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookName")} />
+                    <div className="flex flex-row space-x-1">
+
+                      <div className="flex flex-col space-y-1 w-2/3">
+                        <label htmlFor="bookName" className="text-sm font-medium tracking-tight">Book Name</label>
+                        <input type="text" id="bookName" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookName")} />
+                      </div>
+
+                      <div className="flex flex-col space-y-1 w-1/3">
+                        <label htmlFor="bookQuantity" className="text-sm font-medium tracking-tight">Book Quantity</label>
+                        <input type="number" step={1} min={0} id="bookQuantity" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookQuantity")} />
+                      </div>
+
                     </div>
-                    <div className="flex flex-col space-y-1">
-                      <label htmlFor="bookISBN" className="text-sm font-medium tracking-tight">Book ISBN</label>
-                      <input type="text" id="bookISBN" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookISBN")} />
+
+                    <div className="flex flex-row space-x-1">
+                      <div className="flex flex-col space-y-1 w-full">
+                        <label htmlFor="bookISBN" className="text-sm font-medium tracking-tight">Book ISBN</label>
+                        <input type="text" id="bookISBN" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookISBN")} />
+                      </div>
+                      <div className="flex flex-col space-y-1 w-full">
+                        <label htmlFor="bookPublishedDate" className="text-sm font-medium tracking-tight">Book Published Date</label>
+                        <input type="date" id="bookPublishedDate" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookPublishedDate", { valueAsDate: true })} />
+                      </div>
                     </div>
+
                     <div className="flex flex-col space-y-1">
                       <label htmlFor="bookDescription" className="text-sm font-medium tracking-tight">Book Description</label>
                       <textarea id="bookDescription" className="w-full h-20 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" maxLength={512} {...register("bookDescription")}></textarea>
-                    </div>
-                    <div className="flex flex-col space-y-1">
-                      <label htmlFor="bookQuantity" className="text-sm font-medium tracking-tight">Book Quantity</label>
-                      <input type="number" step={1} min={0} id="bookQuantity" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookQuantity")} />
                     </div>
 
                     <div className="flex flex-col space-y-1">
@@ -175,26 +192,29 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
                       <input type="text" id="bookThumbnailURL" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookThumbnailURL")} />
                     </div>
 
-                    <div className="flex flex-col space-y-1">
-                      <label htmlFor="bookAuthorId" className="text-sm font-medium tracking-tight">Book Author</label>
-                      <select id="bookAuthor" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookAuthorId")}>
-                        {
-                          bookAuthors.data && bookAuthors.data.map((author, index) => (
-                            <option value={author.bookAuthorId} key={index}>{author.authorFirstName + " " + author.authorLastName}</option>
-                          ))
-                        }
-                      </select>
+                    <div className="flex flex-row space-x-1">
+                      <div className="flex flex-col space-y-1 w-full">
+                        <label htmlFor="bookAuthorId" className="text-sm font-medium tracking-tight">Book Author</label>
+                        <select id="bookAuthor" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookAuthorId")}>
+                          {
+                            bookAuthors.data && bookAuthors.data.map((author, index) => (
+                              <option value={author.bookAuthorId} key={index}>{author.authorFirstName + " " + author.authorLastName}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
+                      <div className="flex flex-col space-y-1 w-full">
+                        <label htmlFor="bookCategoryId" className="text-sm font-medium tracking-tight">Book Category</label>
+                        <select id="bookCategory" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookCategoryId")}>
+                          {
+                            bookCategories.data && bookCategories.data.map((category, index) => (
+                              <option value={category.bookCategoryId} key={index}>{category.categoryName}</option>
+                            ))
+                          }
+                        </select>
+                      </div>
                     </div>
-                    <div className="flex flex-col space-y-1">
-                      <label htmlFor="bookCategoryId" className="text-sm font-medium tracking-tight">Book Category</label>
-                      <select id="bookCategory" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookCategoryId")}>
-                        {
-                          bookCategories.data && bookCategories.data.map((category, index) => (
-                            <option value={category.bookCategoryId} key={index}>{category.categoryName}</option>
-                          ))
-                        }
-                      </select>
-                    </div>
+
                   </form>
                 ) : (
                   <>
