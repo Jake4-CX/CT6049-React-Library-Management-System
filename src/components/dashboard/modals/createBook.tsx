@@ -17,16 +17,17 @@ type FormValues = {
   bookDescription: string,
   bookQuantity: number,
   bookAuthorId: number,
-  bookCategoryId: number
+  bookCategoryId: number,
+  bookThumbnailURL: string,
 }
 
 const schema = z.object({
   bookName: z.string()
     .min(1, "Book name is required")
     .max(64, "Book name must be less than 64 characters long."),
-  bookISBN: z.string()
-    .min(1, "Book ISBN is required")
-    .max(32, "Book ISBN must be less than 32 characters long."),
+  bookISBN: z.coerce.number()
+    .positive("Book ISBN must be a positive number")
+    .min(1, "Book ISBN is required"),
   bookDescription: z.string()
     .min(1, "Book description is required")
     .max(512, "Book description must be less than 512 characters long."),
@@ -35,7 +36,10 @@ const schema = z.object({
   bookAuthorId: z.string()
     .min(1, "Book author is required"),
   bookCategoryId: z.string()
-    .min(1, "Book category is required")
+    .min(1, "Book category is required"),
+  bookThumbnailURL: z.string()
+    .url("Book thumbnail URL must be a valid URL")
+    .optional()
 });
 
 type CreateBookModalProps = {
@@ -105,6 +109,7 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
       bookQuantity: data.bookQuantity,
       bookAuthorId: data.bookAuthorId,
       bookCategoryId: data.bookCategoryId,
+      bookThumbnailURL: data.bookThumbnailURL,
       bookPublishedDate: new Date()
     });
   }
@@ -164,6 +169,12 @@ const CreateBookModal: React.FC<CreateBookModalProps> = (props) => {
                       <label htmlFor="bookQuantity" className="text-sm font-medium tracking-tight">Book Quantity</label>
                       <input type="number" step={1} min={0} id="bookQuantity" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookQuantity")} />
                     </div>
+
+                    <div className="flex flex-col space-y-1">
+                      <label htmlFor="bookThumbnailURL" className="text-sm font-medium tracking-tight">Book Thumbnail URL</label>
+                      <input type="text" id="bookThumbnailURL" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookThumbnailURL")} />
+                    </div>
+
                     <div className="flex flex-col space-y-1">
                       <label htmlFor="bookAuthorId" className="text-sm font-medium tracking-tight">Book Author</label>
                       <select id="bookAuthor" className="w-full h-10 px-4 py-2 rounded-lg bg-gray-50 border-gray-100 border-[1px] focus:border-gray-200 outline-none focus:outline-none transition-all" {...register("bookAuthorId")}>

@@ -31,7 +31,7 @@ const SmallBookDisplayCard: React.FC<SmallBookDisplayCardProps> = (props) => {
         </div>
 
         <div className="flex flex-col w-full h-[4rem] px-2 py-1 bg-white rounded-b-xl">
-          <h2 onClick={() => navigate("/book/" + props.book.bookId)} className="text-lg font-bold line-clamp-2 pr-2 cursor-pointer">{props.book.bookName}</h2>
+          <h2 onClick={() => navigate("/book/" + props.book.bookId)} className="text-lg font-bold line-clamp-1 pr-2 cursor-pointer">{props.book.bookName}</h2>
           <p className="text-gray-500 text-sm line-clamp-1">
             <span className="font-semibold">Category: </span>
             <span>{props.book.bookCategory?.categoryName}</span>

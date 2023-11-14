@@ -29,7 +29,7 @@ const SearchComponent: React.FC = () => {
           <input
             type="text"
             placeholder="Search for books..."
-            className="w-full h-full px-4 py-2 rounded-l-lg bg-[#353535] text-white focus:outline-none"
+            className="w-full lg:max-w-[12rem] h-full px-4 py-2 rounded-l-lg bg-[#353535] text-white focus:outline-none"
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button className="h-full flex items-center justify-center bg-[#353535] hover:bg-[#3f3f3f] text-white duration-300 rounded-r-lg space-x-3 px-4 py-2 lg:px-6">
