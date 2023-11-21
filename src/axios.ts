@@ -15,11 +15,11 @@ api.interceptors.request.use(
 
     if (userTokens) {
       config.headers['Authorization'] = `Bearer ${userTokens.accessToken}`;
-      config.headers['Database-Type'] = databaseType;
     }
 
     config.headers['Accept'] = 'application/json';
     config.headers['Content-Type'] = 'application/json';
+    config.headers['Database-Type'] = databaseType;
 
     return config;
   },
