@@ -11,6 +11,7 @@ import RequireAuth from './routes/features/RequireAuth';
 import BookPage from './views/books/viewBook';
 import AppInitializer from './utils/appInitializer';
 import AdminDashboardPage from './views/dashboard/adminDashboard';
+import RegisterPage from './views/authentication/register';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
 
       {/* Authentication */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
       <Route path="/book/:bookId" element={<BookPage />} />
 

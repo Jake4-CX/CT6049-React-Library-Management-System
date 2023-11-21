@@ -6,11 +6,10 @@ import { z } from "zod";
 import { Link } from "react-router-dom";
 import ErrorComponent from "../../components/global/error";
 import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "../../api/authentication";
+import { registerUser } from "../../api/authentication";
 import toast from "react-hot-toast";
 import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
-import { setTokens, setUser } from "../../redux/features/user-slice";
 import { AxiosError, AxiosResponse } from "axios";
 
 type FormValues = {
@@ -29,7 +28,7 @@ const schema = z.object({
     .regex(/^[a-zA-Z\d@?!$^&*]+$/, "Password can only contain Latin letters in any case (a-Z), numbers, and the symbols @?!$^&*.")
 });
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,36 +44,30 @@ const LoginPage: React.FC = () => {
   }
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: loginUser,
-    mutationKey: "loginUser",
+    mutationFn: registerUser,
+    mutationKey: "registerUser",
     onSuccess: (data: AxiosResponse) => {
-      const userObject: { data: { user: UserDataType, token: TokenDataType }, message: string } = data.data;
       console.log("Success: ", data);
-      toast.success("Successfully logged in!");
-
-      dispatch(setUser(userObject.data.user));
-      dispatch(setTokens(userObject.data.token));
-
-      localStorage.setItem("user", JSON.stringify(userObject.data.user));
-      localStorage.setItem("tokens", JSON.stringify(userObject.data.token));
+      toast.success("Successfully registered!");
     },
     onError: (error: AxiosError) => {
-      if (error.response && error.response.status !== undefined && error.response.status === 401) {
+      
+      if (error.response && error.response.status !== undefined && error.response.status === 409) {
+        // User already exists - Conflict
         toast.error((error.response as any).data.message);
       } else {
         console.log("Error: ", error) ;
-        toast.error("Error logging in, please try again.");
+        toast.error("Error registering, please try again.");
       }
     }
   });
-
 
   return (
     <DefaultLayout className="px-[4%]">
       <div className="flex flex-col bg-[#ffffff] min-w-fit w-[90vw] md:w-[32rem] max-h-fit rounded-xl shadow-2xl space-y-3 p-8 py-12">
         <div className="">
-          <h2 className="text-2xl font-bold">Login</h2>
-          <p className="text-gray-500 text-sm pt-2">Sign in to your account</p>
+          <h2 className="text-2xl font-bold">Register</h2>
+          <p className="text-gray-500 text-sm pt-2">Register an account</p>
           <hr className="h-0 my-2 -mx-8 border border-solid border-t-0 border-gray-600 opacity-10" />
         </div>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
@@ -123,7 +116,7 @@ const LoginPage: React.FC = () => {
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                   </svg>
                 ) : (
-                  <p>Login</p>
+                  <p>Register</p>
                 )
               }
             </button>
@@ -131,11 +124,12 @@ const LoginPage: React.FC = () => {
         </form>
 
         <div className="flex justify-center items-center mt-6">
-          <p className="text-gray-700 text-sm">Don&apos;t have an account? <Link to={"/register"} className="transition duration-500 font-bold hover:underline hover:text-gray-800 cursor-pointer">Sign up.</Link></p>
+          <p className="text-gray-700 text-sm">Have an account? <Link to={"/login"} className="transition duration-500 font-bold hover:underline hover:text-gray-800 cursor-pointer">Login.</Link></p>
         </div>
       </div>
     </DefaultLayout>
   )
+
 }
 
-export default LoginPage;
+export default RegisterPage;

@@ -4,6 +4,10 @@ export function loginUser(credentials: { userEmail: string; userPassword: string
   return api.post(`/users/login`, credentials);
 }
 
+export function registerUser(credentials: { userEmail: string; userPassword: string }) {
+  return api.post(`/users/register`, credentials);
+}
+
 export function validateUserAccessToken(accessToken: string) {
   return api.post(`/users/validate`, {},
     {
