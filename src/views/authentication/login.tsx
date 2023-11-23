@@ -59,8 +59,8 @@ const LoginPage: React.FC = () => {
       localStorage.setItem("tokens", JSON.stringify(userObject.data.token));
     },
     onError: (error: AxiosError) => {
-      if (error.response && error.response.status !== undefined && error.response.status === 401) {
-        toast.error((error.response as any).data.message);
+      if (error.response && error.response.status && error.response.status === 401) {
+        toast.error((error.response?.data as { message: string }).message);
       } else {
         console.log("Error: ", error) ;
         toast.error("Error logging in, please try again.");

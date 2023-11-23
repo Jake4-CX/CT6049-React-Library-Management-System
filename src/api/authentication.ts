@@ -13,6 +13,7 @@ export function validateUserAccessToken(accessToken: string) {
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Database-Type": (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL"
       }
     }
   );

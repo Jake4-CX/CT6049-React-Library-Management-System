@@ -51,6 +51,7 @@ api.interceptors.response.use(
 
         setLocalStoredTokens(data);
         originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
+        originalRequest.headers['Database-Type'] = (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL";
         return api(originalRequest);
       } catch (refreshError) {
         // Handle the error, e.g. redirect to login, clear tokens etc.
