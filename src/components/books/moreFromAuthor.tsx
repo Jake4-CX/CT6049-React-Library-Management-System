@@ -23,7 +23,7 @@ const MoreFromAuthor: React.FC<MoreFromAuthorProps> = (props) => {
       }
 
       const authorBooksResponse = await getBooksFromAuthor(props.author.bookAuthorId);
-      return authorBooksResponse.data as { books: Book[] };
+      return authorBooksResponse.data.books as { book: Book, loanedBook?: LoanedBook, booksLoaned: number }[];
     }
   })
 
@@ -40,7 +40,7 @@ const MoreFromAuthor: React.FC<MoreFromAuthorProps> = (props) => {
                   <h2 className="text-lg font-semibold">Loading...</h2>
                 </div>
               </>
-            ) : (query.data.books.length === 0) ? (
+            ) : (query.data.length === 0) ? (
               <>
                 <h2 className="text-lg font-semibold">No books found</h2>
               </>
@@ -56,7 +56,7 @@ const MoreFromAuthor: React.FC<MoreFromAuthorProps> = (props) => {
                   className="h-full w-full"
                 >
                   {
-                    query.data?.books.map((book, index) => {
+                    query.data?.map((book, index) => {
                       return (
                         <SwiperSlide style={{ minWidth: 194, maxWidth: 194 }} key={index}>
                           <SmallBookDisplayCard book={book} />
