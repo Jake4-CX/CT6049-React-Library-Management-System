@@ -10,8 +10,18 @@ import BookCirculationGraph from "../../components/dashboard/graphs/bookCirculat
 import BooksByCategoryGraph from "../../components/dashboard/graphs/booksByCategory";
 import OverdueTable from "../../components/dashboard/tables/overdueTable";
 import MyLoansTable from "../../components/dashboard/tables/myLoansTable";
+import { useNavigate } from "react-router-dom";
+import { removeLocalStoredTokens, removeLocalStoredUser } from "../../api/authentication";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { setTokens, setUser } from "../../redux/features/user-slice";
 
 const AdminDashboardPage: React.FC = () => {
+
+  
+  const dispatch = useDispatch<AppDispatch>();
+  
+  const navigate = useNavigate();
 
   const [showCreateBookModal, setShowCreateBookModal] = useState(false);
   const [showCreateCategoryModal, setShowCreateCategoryModal] = useState(false);
@@ -20,9 +30,15 @@ const AdminDashboardPage: React.FC = () => {
   return (
     <DefaultLayout className="mt-3">
       <div className="w-full md:w-[44rem] xl:w-[56rem] space-y-3 bg-gray-200 p-4 rounded-lg">
-        <div className="">
-          <h1 className="text-lg font-bold">Dashboard</h1>
-          <p className="text-sm font-light tracking-tight">Some subheading text</p>
+        <div className="flex flex-row justify-between">
+          <div className="">
+            <h1 className="text-lg font-bold">Dashboard</h1>
+            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+          </div>
+          <div className="flex items-center justify-center">
+            {/* Logout button */}
+            <button onClick={handleLogout} className="w-full bg-[#353535] text-white rounded-lg py-2 px-6">Logout</button>
+          </div>
         </div>
 
         <div className="">
@@ -127,6 +143,16 @@ const AdminDashboardPage: React.FC = () => {
       <CreateAuthorModal isOpen={showCreateAuthorModal} closeCallback={setShowCreateAuthorModal} />
     </DefaultLayout>
   )
+
+  function handleLogout() {
+    removeLocalStoredUser();
+    removeLocalStoredTokens();
+
+    dispatch(setUser(undefined));
+    dispatch(setTokens(undefined));
+
+    navigate("/login");
+  }
 }
 
 export default AdminDashboardPage;

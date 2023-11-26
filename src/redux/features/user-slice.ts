@@ -21,10 +21,10 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserDataType>) => {
+    setUser: (state, action: PayloadAction<UserDataType | undefined>) => {
       state.value.userData = action.payload;
     },
-    setTokens: (state, action: PayloadAction<TokenDataType>) => {
+    setTokens: (state, action: PayloadAction<TokenDataType | undefined>) => {
       state.value.tokenData = action.payload;
     }
   },
