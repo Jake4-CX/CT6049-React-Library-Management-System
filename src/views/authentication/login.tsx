@@ -3,7 +3,7 @@ import DefaultLayout from "../../layouts/defaultLayout";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ErrorComponent from "../../components/global/error";
 import { useMutation } from "@tanstack/react-query";
 import { loginUser } from "../../api/authentication";
@@ -32,6 +32,8 @@ const schema = z.object({
 const LoginPage: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
+    
+  const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
@@ -57,6 +59,8 @@ const LoginPage: React.FC = () => {
 
       localStorage.setItem("user", JSON.stringify(userObject.data.user));
       localStorage.setItem("tokens", JSON.stringify(userObject.data.token));
+
+      navigate("/dashboard");
     },
     onError: (error: AxiosError) => {
       if (error.response && error.response.status && error.response.status === 401) {
