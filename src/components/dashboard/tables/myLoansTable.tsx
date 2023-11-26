@@ -27,7 +27,7 @@ const MyLoansTable: React.FC = () => {
       header: "Book Name",
       cell: ({ row }) => (
         <>
-          <a onClick={() => void navigate("/book/" + row.original.book.bookId)} className="text-blue-500 hover:underline cursor-pointer">
+          <a onClick={() => void navigate("/book/" + row.original.book.bookId)} title={row.original.book.bookName} className="text-blue-500 hover:underline cursor-pointer">
             {row.original.book.bookName}
           </a>
         </>
@@ -47,7 +47,7 @@ const MyLoansTable: React.FC = () => {
       header: "Loaned At",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
-          {moment(row.original.loanedAt).format("DD/MM/YYYY")}
+          {moment(row.original.loanedAt).format("DD/MM/YY")}
         </div>
       )
     },
@@ -56,7 +56,7 @@ const MyLoansTable: React.FC = () => {
       header: "Due Date",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
-          {moment(row.original.loanedAt).add(14, "days").format("DD/MM/YYYY")}
+          {moment(row.original.loanedAt).add(14, "days").format("DD/MM/YY")}
         </div>
       )
     },
@@ -65,7 +65,7 @@ const MyLoansTable: React.FC = () => {
       header: "Returned At",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
-          {row.original.returnedAt ? moment(row.original.returnedAt).format("DD/MM/YYYY") : "Not returned"}
+          {row.original.returnedAt ? moment(row.original.returnedAt).format("DD/MM/YY") : "Not returned"}
         </div>
       )
     }
@@ -118,8 +118,8 @@ const MyLoansTable: React.FC = () => {
                     <tr key={row.id}>
                       {
                         row.getVisibleCells().map(cell => (
-                          <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
+                          <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 truncate overflow-hidden max-w-[10rem]">
                               {
                                 flexRender(
                                   cell.column.columnDef.cell,

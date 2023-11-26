@@ -28,7 +28,7 @@ const OverdueTable: React.FC = () => {
       header: "Book Name",
       cell: ({ row }) => (
         <>
-          <a onClick={() => void navigate("/book/" + row.original.book.bookId)} className="text-blue-500 hover:underline cursor-pointer">
+          <a onClick={() => void navigate("/book/" + row.original.book.bookId)} title={row.original.book.bookName} className="text-blue-500 hover:underline cursor-pointer">
             {row.original.book.bookName}
           </a>
         </>
@@ -52,8 +52,8 @@ const OverdueTable: React.FC = () => {
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex items-center justify-center space-x-2">
-          <button onClick={() => void navigate("/book/" + row.original.book.bookId)} className="flex items-center justify-center w-[40px] h-[40px] rounded-full bg-[#f5f5f5] hover:bg-[#e5e5e5] transition-colors duration-300">
-            <HiLink className="text-[#545F71] text-2xl" />
+          <button onClick={() => void navigate("/book/" + row.original.book.bookId)} className="flex items-center justify-center w-[30px] h-[30px] rounded-full bg-[#f5f5f5] hover:bg-[#e5e5e5] transition-colors duration-300">
+            <HiLink className="text-[#545F71] text-xl" />
           </button>
         </div>
       )
@@ -107,8 +107,8 @@ const OverdueTable: React.FC = () => {
                     <tr key={row.id}>
                       {
                         row.getVisibleCells().map(cell => (
-                          <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
+                          <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
+                            <div className="text-sm text-gray-900 truncate overflow-hidden max-w-[10rem]">
                               {
                                 flexRender(
                                   cell.column.columnDef.cell,
