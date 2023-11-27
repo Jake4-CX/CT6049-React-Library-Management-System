@@ -32,7 +32,7 @@ const AdminDashboardPage: React.FC = () => {
       <div className="w-full md:w-[44rem] xl:w-[56rem] space-y-3 bg-gray-200 p-4 rounded-lg">
         <div className="flex flex-row justify-between">
           <div className="">
-            <h1 className="text-lg font-bold">Dashboard</h1>
+            <h1 className="text-lg font-bold">Admin Dashboard</h1>
             <p className="text-sm font-light tracking-tight">Some subheading text</p>
           </div>
           <div className="flex items-center justify-center">

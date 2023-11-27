@@ -7,11 +7,23 @@ import LoginPage from './views/authentication/login';
 
 import { Toaster } from 'react-hot-toast';
 import { ReduxProvider } from './redux/provider';
-import RequireAuth from './routes/features/RequireAuth';
 import BookPage from './views/books/viewBook';
 import AppInitializer from './utils/appInitializer';
 import AdminDashboardPage from './views/dashboard/adminDashboard';
 import RegisterPage from './views/authentication/register';
+import UserDashboardPage from './views/dashboard/userDashboard';
+import PerRole from './routes/features/PerRole';
+
+const dashboardRoleElements = [
+  {
+    role: "ADMIN",
+    element: <AdminDashboardPage />
+  },
+  {
+    role: "USER",
+    element: <UserDashboardPage />
+  }
+]
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,9 +36,7 @@ const router = createBrowserRouter(
 
       <Route path="/book/:bookId" element={<BookPage />} />
 
-      <Route element={<RequireAuth allowedRoles={['USER', 'ADMIN']} />}>
-        <Route path="/dashboard" element={<AdminDashboardPage />} />
-      </Route>
+      <Route path="/dashboard" element={<PerRole roleElements={dashboardRoleElements}/>} />
     </Route>
   )
 )
