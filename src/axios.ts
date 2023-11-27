@@ -47,7 +47,7 @@ api.interceptors.response.use(
 
       try {
         // Request a new token using the refresh token
-        const { data }: { data: TokenDataType } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken: userTokens.refreshToken });
+        const { data }: { data: TokenDataType } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken: userTokens.refreshToken }, { headers: { 'Database-Type': (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL" } });
 
         setLocalStoredTokens(data);
         originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
