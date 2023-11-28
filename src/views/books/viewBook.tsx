@@ -148,7 +148,7 @@ const BookPage: React.FC = () => {
                           {
                             isPayFineLoading ? (
                               <div className="flex flex-row space-x-2">
-                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white my-auto"></div>
                                 <span>Paying fine</span>
                               </div>
                             ) : (
@@ -163,7 +163,7 @@ const BookPage: React.FC = () => {
                           {
                             isReturnBookLoading ? (
                               <div className="flex flex-row space-x-2">
-                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white my-auto"></div>
                                 <span>Returning</span>
                               </div>
                             ) : (
@@ -179,7 +179,7 @@ const BookPage: React.FC = () => {
                             {
                               isBorrowBookLoading ? (
                                 <div className="flex flex-row space-x-2">
-                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white my-auto"></div>
                                   <span>Borrowing</span>
                                 </div>
                               ) : (
