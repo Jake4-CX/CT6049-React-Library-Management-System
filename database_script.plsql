@@ -174,7 +174,7 @@ AFTER UPDATE ON loanedBooks
 FOR EACH ROW
 BEGIN
 	IF :old.returnedAt IS NULL AND :new.returnedAt IS NOT NULL THEN
-		IF :new.loanedAt < SYSDATE + 14 THEN
+		IF TRUNC(NVL(:new.returnedAt, SYSDATE)) - TRUNC(:new.loanedAt) >= 14 THEN
       INSERT INTO loanFines (loanId, amountPaid, paidAt) VALUES (:new.id, (((TRUNC(NVL(:new.returnedAt, SYSDATE)) - TRUNC(:new.loanedAt)) - 14) * 0.5) + 1, CURRENT_TIMESTAMP);
 		END IF;
 	END IF;
