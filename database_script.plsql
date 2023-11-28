@@ -166,3 +166,16 @@ CREATE TABLE LOANFINES (
   PAIDAT TIMESTAMP,
   CONSTRAINT FK_LOANEDBOOKS FOREIGN KEY (LOANID) REFERENCES LOANEDBOOKS(ID)
 );
+
+-- Create Triggers
+-- Fine: Requires to be returned after 14 days. There is a set £1.00 fine, then 0.50p per day after that.
+CREATE OR REPLACE TRIGGER returnBookTrigger
+AFTER UPDATE ON loanedBooks
+FOR EACH ROW
+BEGIN
+	IF :old.returnedAt IS NULL AND :new.returnedAt IS NOT NULL THEN
+		IF :new.loanedAt < SYSDATE + 14 THEN
+      INSERT INTO loanFines (loanId, amountPaid, paidAt) VALUES (:new.id, (((TRUNC(NVL(:new.returnedAt, SYSDATE)) - TRUNC(:new.loanedAt)) - 14) * 0.5) + 1, CURRENT_TIMESTAMP);
+		END IF;
+	END IF;
+END;
