@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import moment from "moment";
 import BookCategoryBadge from "../../components/global/badges/bookCategoryBadge";
 import { AxiosError } from "axios";
-import { payOverdueBookLoan, returnBookLoan } from "../../api/bookLoans";
+import { returnBookLoan } from "../../api/bookLoans";
 import MoreFromAuthor from "../../components/books/moreFromAuthor";
 import MoreFromCategory from "../../components/books/moreFromCategory";
 
@@ -68,23 +68,6 @@ const BookPage: React.FC = () => {
     }
   });
 
-  const { mutate: payFineMutate, isLoading: isPayFineLoading } = useMutation({
-    mutationFn: payOverdueBookLoan,
-    mutationKey: "payFine",
-    onSuccess: () => {
-      toast.success("Successfully paid fine!");
-
-      queryClient.invalidateQueries([`book/${bookId}`]);
-      queryClient.invalidateQueries(['books/landingBooks']);
-    },
-    onError: (error: AxiosError) => {
-      const errorData = error.response?.data as { error: { message: string } } | undefined;
-      const errorMessage = errorData?.error.message ?? "Failed to pay fine.";
-
-      toast.error(errorMessage);
-    }
-  });
-
   return (
     <DefaultLayout className="mt-3">
       <div className="w-full md:w-[44rem] xl:w-[56rem] space-y-3">
@@ -92,7 +75,7 @@ const BookPage: React.FC = () => {
           query.data && query.data.loanedBook && (
             moment().diff(query.data.loanedBook.loanedAt, "days") - 14 >= 0 ? (
               <div className="w-full h-[4rem] flex items-center justify-center rounded-lg bg-red-500 p-4">
-                <h2 className="text-white font-medium">This book is {moment().diff(query.data.loanedBook.loanedAt, "days")} days late. Return now!</h2>
+                <h2 className="text-white font-medium">This book is {moment().diff(query.data.loanedBook.loanedAt, "days") - 14} days late. Return now!</h2>
               </div>
             ) : (
               <div className="w-full h-[4rem] flex items-center justify-center rounded-lg bg-amber-500 p-4">
@@ -144,15 +127,15 @@ const BookPage: React.FC = () => {
                     query.data.loanedBook ? (
                       (moment().diff(query.data.loanedBook.loanedAt, "days") - 14) >= 0) ? (
                       <>
-                        <button onClick={payFineButton} className="bg-red-500 hover:bg-red-600 duration-300 text-gray-100 px-3 py-1 rounded-lg text-xs md:text-sm font-medium ml-2" disabled={isPayFineLoading ?? query.isLoading}>
+                        <button onClick={returnLateButton} className="bg-red-500 hover:bg-red-600 duration-300 text-gray-100 px-3 py-1 rounded-lg text-xs md:text-sm font-medium ml-2" disabled={isReturnBookLoading ?? query.isLoading}>
                           {
-                            isPayFineLoading ? (
+                            isReturnBookLoading ? (
                               <div className="flex flex-row space-x-2">
                                 <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white my-auto"></div>
-                                <span>Paying fine</span>
+                                <span>Returning late</span>
                               </div>
                             ) : (
-                              <span>Pay fine</span>
+                              <span>Return late</span>
                             )
                           }
                         </button>
@@ -245,7 +228,7 @@ const BookPage: React.FC = () => {
         if ((moment().diff(query.data.loanedBook.loanedAt, "days") - 14) < 0) {
           returnBookMutate(query.data.loanedBook.loanedBookId as string);
         } else {
-          toast.error("You have to pay a fine for returning this book.");
+          toast.error("You have to return this book late.");
           return;
         }
 
@@ -258,16 +241,16 @@ const BookPage: React.FC = () => {
 
   }
 
-  function payFineButton() {
+  function returnLateButton() {
 
     if (query.data && query.data.loanedBook) {
 
       if (query.data.loanedBook.returnedAt == undefined) {
 
         if ((moment().diff(query.data.loanedBook.loanedAt, "days") - 14) > 0) {
-          payFineMutate(query.data.loanedBook.loanedBookId as string);
+          returnBookMutate(query.data.loanedBook.loanedBookId as string);
         } else {
-          toast.error("You do not have to pay a fine for returning this book.");
+          toast.error("This book is not late.");
           return;
         }
       } else {
