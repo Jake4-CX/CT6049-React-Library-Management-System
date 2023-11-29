@@ -7,6 +7,7 @@ import { setTokens, setUser } from "../../redux/features/user-slice";
 import MyLoansTable from "../../components/dashboard/tables/myLoansTable";
 import MyCurrentLoansTable from "../../components/dashboard/tables/myCurrentLoansTable";
 import MonthlyFineCard from "../../components/dashboard/cards/monthlyFineCard";
+import MyFinesTable from "../../components/dashboard/tables/myFinesTable";
 
 
 
@@ -31,6 +32,15 @@ const UserDashboardPage: React.FC = () => {
         </div>
 
         <MonthlyFineCard />
+
+        {/* Table of my Fines */}
+        <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
+          <div className="w-full">
+            <h1 className="text-xl font-bold">My Fines</h1>
+            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+          </div>
+          <MyFinesTable />
+        </div>
 
         {/* Table of my current Loans */}
         {/* Table of Overdue Books */}

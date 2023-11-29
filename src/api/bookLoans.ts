@@ -28,9 +28,9 @@ export function getAllUsersHistoricLoans() {
   return api.get(`/users/me/loans/historic`);
 }
 
-export function payOverdueBookLoan(id: string) {
-  return api.get(`/loans/${id}/pay-fine`);
-}
+// export function payOverdueBookLoan(id: string) {
+//   return api.get(`/loans/${id}/pay-fine`);
+// }
 
 export function returnBookLoan(id: string) {
   return api.get(`/loans/${id}/return`);
