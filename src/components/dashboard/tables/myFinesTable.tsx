@@ -1,28 +1,59 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import moment from "moment";
 import PaginationComponent from "../../global/pagination";
-import { getAllUserFines } from "../../../api/loanFines";
+import { getAllUserFinesBetweenDates, payUserFine } from "../../../api/loanFines";
+import DaysOverdueBadge from "../../global/badges/daysOverdueBadge";
+import toast from "react-hot-toast";
+import DateRangePickerComponent from "../../global/inputs/dateRangePicker";
+import React, { useEffect, useState } from "react";
 
 
 const MyFinesTable: React.FC = () => {
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const [date, setDate] = useState<{ startDate: Date, endDate: Date }>({
+    startDate: new Date(new Date().setDate(new Date().getDate() - 14)),
+    endDate: new Date()
+  });
 
   const myFines = useQuery({
-    queryKey: ["myFines"],
+    queryKey: [`myFines`],
     cacheTime: 1000 * 60 * 5, // 5 minutes
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
 
-      return await ((await getAllUserFines()).data).loanFines as LoanFine[];
+      return await ((await getAllUserFinesBetweenDates(date.startDate.toISOString(), date.endDate.toISOString())).data).loanFines as LoanFine[];
+    }
+  });
+
+  useEffect(() => {
+
+    setTimeout(() => {
+      myFines.refetch();
+    }, 100);
+  }, [date, myFines]);
+
+  const { mutate: payFineMutate, isLoading: payFineIsLoading } = useMutation({
+    mutationFn: payUserFine,
+    mutationKey: "payFine",
+    onSuccess: async () => {
+      toast.success("Fine paid successfully!");
+      queryClient.invalidateQueries([`myFines`]);
+      queryClient.invalidateQueries([`userMonthlyFines`]);
+    },
+    onError: async () => {
+      toast.error("Error paying fine!");
+      await myFines.refetch();
     }
   });
 
   const columns: ColumnDef<LoanFine>[] = [
     {
-      accessorKey: "id",
+      accessorKey: "loanFineId",
       header: "ID"
     },
     {
@@ -37,21 +68,20 @@ const MyFinesTable: React.FC = () => {
       )
     },
     {
-      accessorKey: "loan.returnedAt",
-      header: "Returned At",
+      accessorKey: "fineAmount",
+      header: "Fine Amount",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
-          {moment(row.original.loan?.returnedAt).format("DD/MM/YY")}
+          <span className="text-gray-500">£{row.original.fineAmount.toFixed(2)}</span>
         </div>
       )
     },
     {
-      accessorKey: "fineAmount",
-      header: "Fine Amount",
+      header: "Days Overdue",
       cell: ({ row }) => (
         <>
           <div className="flex items-center justify-center">
-            <span className="text-red-500">£ {row.original.fineAmount}</span>
+            <DaysOverdueBadge daysOverdue={moment(row.original.loan?.returnedAt).diff(moment(row.original.loan?.loanedAt), "days") - 14} />
           </div>
         </>
       )
@@ -62,12 +92,34 @@ const MyFinesTable: React.FC = () => {
       cell: ({ row }) => (
         <>
           <div className="flex items-center justify-center">
-            <span className="text-gray-500">{row.original.paidAt ? moment(row.original.paidAt).format("DD MMM YYYY") : "Not Paid"}</span>
+            {/* If 'row.original.paidAt' is null, user has to pay fine - display button, else display paidAt date */}
+            {
+              row.original.paidAt == null ? (
+                <>
+                  <button onClick={() => void handlePayFine(row.original.loanFineId)} className="inline-flex items-center w-fit px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none" disabled={payFineIsLoading}>
+                    {
+                      payFineIsLoading ? (
+                        <div className="flex flex-row space-x-2">
+                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white my-auto"></div>
+                          <span>Paying Fine</span>
+                        </div>
+                      ) : (
+                        <span>Pay Fine</span>
+                      )
+                    }
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="text-gray-500">{moment(row.original.paidAt).format("DD MMM YYYY")}</span>
+                </>
+              )
+            }
           </div>
         </>
       )
     }
-  ]
+  ];
 
   const table = useReactTable({
     data: myFines.data ?? [],
@@ -81,6 +133,7 @@ const MyFinesTable: React.FC = () => {
   return (
     <>
       <div className="w-full lg:max-w-[42rem] shadow border-b border-gray-200 sm:rounded-lg overflow-x-auto">
+        <DateRangePickerComponent date={date} onDateChange={setDate} />
         {
           myFines.isLoading ? (
             <div className="flex flex-col items-center justify-center h-[5.813rem]">
@@ -89,62 +142,68 @@ const MyFinesTable: React.FC = () => {
           ) : myFines.isError ? (
             <div>Error: {myFines.error.message}</div>
           ) : (
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50 table-auto">
-                {
-                  table.getHeaderGroups().map(headerGroup => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <th key={header.id} colSpan={header.colSpan} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          {
-                            header.isPlaceholder ? null : (
-                              flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )
-                            )
-                          }
-                        </th>
-                      ))}
-                    </tr>
-                  ))
-                }
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {
-                  table.getRowModel().rows.length > 0 ? (table.getRowModel().rows.map(row => (
-                    <tr key={row.id}>
-                      {
-                        row.getVisibleCells().map(cell => (
-                          <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 truncate overflow-hidden max-w-[10rem]">
-                              {
+            <>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 table-auto">
+                  {
+                    table.getHeaderGroups().map(headerGroup => (
+                      <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                          <th key={header.id} colSpan={header.colSpan} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {
+                              header.isPlaceholder ? null : (
                                 flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext(),
+                                  header.column.columnDef.header,
+                                  header.getContext()
                                 )
-                              }
-                            </div>
-                          </td>
-                        ))
-                      }
-                    </tr>
-                  ))) : (
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium" colSpan={columns.length}>
-                        No fines found.
-                      </td>
-                    </tr>
-                  )
-                }
-              </tbody>
-            </table>
+                              )
+                            }
+                          </th>
+                        ))}
+                      </tr>
+                    ))
+                  }
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {
+                    table.getRowModel().rows.length > 0 ? (table.getRowModel().rows.map(row => (
+                      <tr key={row.id}>
+                        {
+                          row.getVisibleCells().map(cell => (
+                            <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
+                              <div className="text-sm text-gray-900 truncate overflow-hidden max-w-[10rem]">
+                                {
+                                  flexRender(
+                                    cell.column.columnDef.cell,
+                                    cell.getContext(),
+                                  )
+                                }
+                              </div>
+                            </td>
+                          ))
+                        }
+                      </tr>
+                    ))) : (
+                      <tr>
+                        <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium" colSpan={columns.length}>
+                          No fines found.
+                        </td>
+                      </tr>
+                    )
+                  }
+                </tbody>
+              </table>
+            </>
           )
         }
       </div>
       <PaginationComponent className="mt-3" pageSize={pageSize} pageIndex={pageIndex} totalItems={table.getFilteredRowModel().rows.length} callbackFn={table} />
     </>
   )
+
+  function handlePayFine(loanFineId: string) {
+    payFineMutate(loanFineId);
+  }
 }
 
 export default MyFinesTable;

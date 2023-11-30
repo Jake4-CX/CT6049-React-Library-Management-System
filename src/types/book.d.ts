@@ -34,7 +34,7 @@ type LoanedBook = {
 }
 
 type LoanFine = {
-  id: string
+  loanFineId: string
   paidAt?: Date,
   fineAmount: number,
   book?: Book,
