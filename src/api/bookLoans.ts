@@ -16,6 +16,10 @@ export function getAllUsersLoans() {
   return api.get(`/users/me/loans/all`);
 }
 
+export function getAllUsersLoansBetween(startDate: string, endDate: string) {
+  return api.get(`/users/me/loans/all/between?startDate=${startDate}&endDate=${endDate}`);
+}
+
 export function getAllUsersBorrowedLoans() {
   return api.get(`/users/me/loans/borrowed`);
 }
@@ -27,10 +31,6 @@ export function getAllUsersOverdueLoans() {
 export function getAllUsersHistoricLoans() {
   return api.get(`/users/me/loans/historic`);
 }
-
-// export function payOverdueBookLoan(id: string) {
-//   return api.get(`/loans/${id}/pay-fine`);
-// }
 
 export function returnBookLoan(id: string) {
   return api.get(`/loans/${id}/return`);

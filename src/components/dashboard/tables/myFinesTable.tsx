@@ -20,6 +20,11 @@ const MyFinesTable: React.FC = () => {
     endDate: new Date()
   });
 
+  const [dateCache, setDateCache] = useState<{ startDate: Date, endDate: Date }>({
+    startDate: date.startDate,
+    endDate: date.endDate
+  });
+
   const myFines = useQuery({
     queryKey: [`myFines`],
     cacheTime: 1000 * 60 * 5, // 5 minutes
@@ -32,10 +37,13 @@ const MyFinesTable: React.FC = () => {
 
   useEffect(() => {
 
+    if (dateCache.startDate === date.startDate && dateCache.endDate === date.endDate) return;
+
     setTimeout(() => {
+      setDateCache(date);
       myFines.refetch();
     }, 100);
-  }, [date, myFines]);
+  }, [date, dateCache, myFines]);
 
   const { mutate: payFineMutate, isLoading: payFineIsLoading } = useMutation({
     mutationFn: payUserFine,

@@ -1,15 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { getAllUsersLoans } from "../../../api/bookLoans";
+import { getAllUsersLoansBetween } from "../../../api/bookLoans";
 import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import BookCategoryBadge from "../../global/badges/bookCategoryBadge";
 import moment from "moment";
 import PaginationComponent from "../../global/pagination";
+import DateRangePickerComponent from "../../global/inputs/dateRangePicker";
+import { useEffect, useState } from "react";
 
 
 const MyLoansTable: React.FC = () => {
 
   const navigate = useNavigate();
+
+  const [date, setDate] = useState<{ startDate: Date, endDate: Date }>({
+    startDate: new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+    endDate: new Date()
+  });
+
+  const [dateCache, setDateCache] = useState<{ startDate: Date, endDate: Date }>({
+    startDate: date.startDate,
+    endDate: date.endDate
+  });
 
   const myLoans = useQuery({
     queryKey: ["myLoans"],
@@ -17,9 +29,19 @@ const MyLoansTable: React.FC = () => {
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
 
-      return await ((await getAllUsersLoans()).data).loanedBooks as LoanedBook[];
+      return await ((await getAllUsersLoansBetween(date.startDate.toISOString(), date.endDate.toISOString())).data).loanedBooks as LoanedBook[];
     }
   });
+
+  useEffect(() => {
+
+    if (dateCache.startDate === date.startDate && dateCache.endDate === date.endDate) return;
+
+    setTimeout(() => {
+      setDateCache(date);
+      myLoans.refetch();
+    }, 100);
+  }, [date, dateCache, myLoans]);
 
   const columns: ColumnDef<LoanedBook>[] = [
     {
@@ -83,6 +105,7 @@ const MyLoansTable: React.FC = () => {
   return (
     <>
       <div className="w-full lg:max-w-[42rem] shadow border-b border-gray-200 sm:rounded-lg overflow-x-auto">
+        <DateRangePickerComponent date={date} onDateChange={setDate} />
         {
           myLoans.isLoading ? (
             <div className="flex flex-col items-center justify-center h-[5.813rem]">
