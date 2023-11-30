@@ -35,9 +35,9 @@ const UserDashboardPage: React.FC = () => {
 
         {/* Table of my Fines */}
         <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
-          <div className="w-full">
+          <div className="w-full mb-2">
             <h1 className="text-xl font-bold">My Fines</h1>
-            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+            <p className="text-sm text-gray-600">Here are your most recent fines, including unpaid fines.</p>
           </div>
           <MyFinesTable />
         </div>
@@ -45,18 +45,18 @@ const UserDashboardPage: React.FC = () => {
         {/* Table of my current Loans */}
         {/* Table of Overdue Books */}
         <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
-          <div className="w-full">
+          <div className="w-full mb-2">
             <h1 className="text-xl font-bold">My Current Loans</h1>
-            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+            <p className="text-sm text-gray-600">Here are your current active loans</p>
           </div>
           <MyCurrentLoansTable />
         </div>
 
         {/* Table of all my Loans */}
         <div className="flex flex-col items-center justify-center w-full bg-white rounded-lg p-4">
-          <div className="w-full">
+          <div className="w-full mb-2">
             <h1 className="text-xl font-bold">My Loan History</h1>
-            <p className="text-sm font-light tracking-tight">Some subheading text</p>
+            <p className="text-sm text-gray-600">Here is your loan history, including current loans.</p>
           </div>
           <MyLoansTable />
         </div>
