@@ -42,6 +42,9 @@ const BookPage: React.FC = () => {
 
       queryClient.invalidateQueries([`book/${bookId}`]);
       queryClient.invalidateQueries(['books/landingBooks']);
+      queryClient.invalidateQueries(['myLoans']);
+      queryClient.invalidateQueries(['myFines']);
+      queryClient.invalidateQueries(['myCurrentLoans']);
     },
     onError: (error: AxiosError) => {
       const errorData = error.response?.data as { error: { message: string } } | undefined;
@@ -59,6 +62,9 @@ const BookPage: React.FC = () => {
 
       queryClient.invalidateQueries([`book/${bookId}`]);
       queryClient.invalidateQueries(['books/landingBooks']);
+      queryClient.invalidateQueries(['myLoans']);
+      queryClient.invalidateQueries(['myFines']);
+      queryClient.invalidateQueries(['myCurrentLoans']);
     },
     onError: (error: AxiosError) => {
       const errorData = error.response?.data as { error: { message: string } } | undefined;
