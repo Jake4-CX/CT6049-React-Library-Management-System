@@ -37,6 +37,4 @@ type LoanFine = {
   loanFineId: string
   paidAt?: Date,
   fineAmount: number,
-  book?: Book,
-  loan?: LoanedBook
 }

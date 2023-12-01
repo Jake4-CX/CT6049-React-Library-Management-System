@@ -31,7 +31,7 @@ const MyFinesTable: React.FC = () => {
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
 
-      return await ((await getAllUserFinesBetweenDates(date.startDate.toISOString(), date.endDate.toISOString())).data).loanFines as LoanFine[];
+      return await ((await getAllUserFinesBetweenDates(date.startDate.toISOString(), date.endDate.toISOString())).data).loanedBooks as LoanedBook[];
     }
   });
 
@@ -59,9 +59,9 @@ const MyFinesTable: React.FC = () => {
     }
   });
 
-  const columns: ColumnDef<LoanFine>[] = [
+  const columns: ColumnDef<LoanedBook>[] = [
     {
-      accessorKey: "loanFineId",
+      accessorKey: "loanFine.loanFineId",
       header: "ID"
     },
     {
@@ -80,7 +80,7 @@ const MyFinesTable: React.FC = () => {
       header: "Fine Amount",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
-          <span className="text-gray-500">£{row.original.fineAmount.toFixed(2)}</span>
+          <span className="text-gray-500">£{row.original.loanFine.fineAmount.toFixed(2)}</span>
         </div>
       )
     },
@@ -89,7 +89,7 @@ const MyFinesTable: React.FC = () => {
       cell: ({ row }) => (
         <>
           <div className="flex items-center justify-center">
-            <DaysOverdueBadge daysOverdue={moment(row.original.loan?.returnedAt).diff(moment(row.original.loan?.loanedAt), "days") - 14} />
+            <DaysOverdueBadge daysOverdue={moment(row.original.returnedAt).diff(moment(row.original.loanedAt), "days") - 14} />
           </div>
         </>
       )
@@ -102,9 +102,9 @@ const MyFinesTable: React.FC = () => {
           <div className="flex items-center justify-center">
             {/* If 'row.original.paidAt' is null, user has to pay fine - display button, else display paidAt date */}
             {
-              row.original.paidAt == null ? (
+              row.original.loanFine.paidAt == null ? (
                 <>
-                  <button onClick={() => void handlePayFine(row.original.loanFineId)} className="inline-flex items-center w-fit px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none" disabled={payFineIsLoading}>
+                  <button onClick={() => void handlePayFine(row.original.loanFine.loanFineId)} className="inline-flex items-center w-fit px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none" disabled={payFineIsLoading}>
                     {
                       payFineIsLoading ? (
                         <div className="flex flex-row space-x-2">
@@ -119,7 +119,7 @@ const MyFinesTable: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <span className="text-gray-500">{moment(row.original.paidAt).format("DD MMM YYYY")}</span>
+                  <span className="text-gray-500">{moment(row.original.loanFine.paidAt).format("DD MMM YYYY")}</span>
                 </>
               )
             }

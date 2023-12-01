@@ -8,7 +8,7 @@ const MonthlyFineCard: React.FC = () => {
     cacheTime: 1000 * 60 * 5, // 5 minutes
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {
-      return await ((await getAllUserFinesPaidBetweenDates(new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(), new Date().toISOString())).data).loanFines as { id: string, loanId: string, fineAmount: number, paidAt?: Date }[];
+      return await ((await getAllUserFinesPaidBetweenDates(new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString(), new Date().toISOString())).data).loanedBooks as LoanedBook[];
     }
   })
 
@@ -21,7 +21,7 @@ const MonthlyFineCard: React.FC = () => {
             userFine.isLoading ? (
               <h1 className="text-3xl font-bold text-white">£ 0.00</h1>
             ) : (
-              <h1 className="text-3xl font-bold text-white">£ {userFine.data?.reduce((prev, curr) => curr.fineAmount ? ((curr.fineAmount ?? 0) + prev) : prev, 0).toFixed(2)}</h1>
+              <h1 className="text-3xl font-bold text-white">£ {userFine.data?.reduce((prev, curr) => curr.loanFine.fineAmount ? ((curr.loanFine.fineAmount ?? 0) + prev) : prev, 0).toFixed(2)}</h1>
             )
           }
           <p className="text-sm font-medium tracking-tight text-white">in Fines in the last 30 days</p>
