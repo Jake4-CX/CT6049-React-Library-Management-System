@@ -1,14 +1,32 @@
 import { Switch } from '@headlessui/react'
 import { useEffect, useState } from 'react';
+import { removeLocalStoredTokens, removeLocalStoredUser } from '../../api/authentication';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
+import { setTokens, setUser } from '../../redux/features/user-slice';
+import { useNavigate } from 'react-router-dom';
 
 
 const ToggleDatabaseComponent: React.FC = () => {
 
   const [database, setDatabase] = useState<"MongoDB" | "SQL">(localStorage.getItem("databaseType") as "MongoDB" | "SQL" || "MongoDB");
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
+
+    if (localStorage.getItem("databaseType") === database) return;
+    
     localStorage.setItem("databaseType", database);
-  }, [database]);
+
+    removeLocalStoredUser();
+    removeLocalStoredTokens();
+    dispatch(setUser(undefined));
+    dispatch(setTokens(undefined));
+
+    navigate(0);
+
+  }, [database, dispatch, navigate]);
 
 
   return (
