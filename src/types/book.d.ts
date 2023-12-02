@@ -1,5 +1,5 @@
 type Book = {
-  bookId?: string,
+  bookId: string,
   bookCategory?: BookCategory,
   bookAuthor?: BookAuthor,
   bookCategoryId: number,
@@ -13,7 +13,7 @@ type Book = {
 }
 
 type BookCategory = {
-  bookCategoryId?: string,
+  bookCategoryId: string,
   categoryName: string,
   categoryDescription: string
 }
@@ -25,7 +25,7 @@ type BookAuthor = {
 }
 
 type LoanedBook = {
-  loanedBookId?: string,
+  loanedBookId: string,
   loanedAt: Date,
   returnedAt?: Date,
   book: Book,

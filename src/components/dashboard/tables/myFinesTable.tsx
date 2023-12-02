@@ -61,11 +61,14 @@ const MyFinesTable: React.FC = () => {
 
   const columns: ColumnDef<LoanedBook>[] = [
     {
-      accessorKey: "loanFine.loanFineId",
-      header: "ID"
+      header: "Loaned At",
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          {moment(row.original.loanedAt).format("DD/MM/YY")}
+        </div>
+      )
     },
     {
-      accessorKey: "book.bookName",
       header: "Book Name",
       cell: ({ row }) => (
         <>
@@ -76,7 +79,6 @@ const MyFinesTable: React.FC = () => {
       )
     },
     {
-      accessorKey: "fineAmount",
       header: "Fine Amount",
       cell: ({ row }) => (
         <div className="flex items-center justify-center">
@@ -104,7 +106,7 @@ const MyFinesTable: React.FC = () => {
             {
               row.original.loanFine.paidAt == null ? (
                 <>
-                  <button onClick={() => void handlePayFine(row.original.loanFine.loanFineId)} className="inline-flex items-center w-fit px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none" disabled={payFineIsLoading}>
+                  <button onClick={() => void handlePayFine(row.original.loanedBookId)} className="inline-flex items-center w-fit px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none" disabled={payFineIsLoading}>
                     {
                       payFineIsLoading ? (
                         <div className="flex flex-row space-x-2">
@@ -209,8 +211,8 @@ const MyFinesTable: React.FC = () => {
     </>
   )
 
-  function handlePayFine(loanFineId: string) {
-    payFineMutate(loanFineId);
+  function handlePayFine(loanedBookId: string) {
+    payFineMutate(loanedBookId);
   }
 }
 
