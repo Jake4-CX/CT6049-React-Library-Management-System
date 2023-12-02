@@ -1,7 +1,4 @@
-import { BsPeopleFill } from "react-icons/bs";
 import DefaultLayout from "../../layouts/defaultLayout";
-import { PiBooksFill } from "react-icons/pi";
-import { FaBookOpen } from "react-icons/fa";
 import { useState } from "react";
 import CreateBookModal from "../../components/dashboard/modals/createBook";
 import CreateCategoryModal from "../../components/dashboard/modals/createCategory";
@@ -15,10 +12,10 @@ import { removeLocalStoredTokens, removeLocalStoredUser } from "../../api/authen
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { setTokens, setUser } from "../../redux/features/user-slice";
+import AdminStatisticsOverviewCards from "../../components/dashboard/cards/adminStatisticsCards";
 
 const AdminDashboardPage: React.FC = () => {
 
-  
   const dispatch = useDispatch<AppDispatch>();
   
   const navigate = useNavigate();
@@ -41,55 +38,7 @@ const AdminDashboardPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 xl:gap-4">
-
-            {/* Books */}
-            <div className="w-full flex flex-row space-x-3 bg-[#8395fb] text-white rounded-lg p-4">
-              <PiBooksFill className="w-8 h-8 opacity-80 my-auto" />
-              <div className="flex flex-col">
-                <h1 className="text-xl font-bold line-clamp-1">Books</h1>
-                <div className="flex flex-row space-x-1">
-                  <span className="opacity-90 text-sm font-medium tracking-tight">Total: 100</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Members */}
-            <div className="w-full flex flex-row space-x-3 bg-[#7fd81e] text-white rounded-lg p-4">
-              <BsPeopleFill className="w-8 h-8 opacity-80 my-auto" />
-              <div className="flex flex-col">
-                <h1 className="text-xl font-bold line-clamp-1">Members</h1>
-                <div className="flex flex-row space-x-1">
-                  <span className="opacity-90 text-sm font-medium tracking-tight">Total: 36</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Issued Books */}
-            <div className="w-full flex flex-row space-x-3 bg-[#00c6ff] text-white rounded-lg p-4">
-              <FaBookOpen className="w-8 h-8 opacity-80 my-auto" />
-              <div className="flex flex-col">
-                <h1 className="text-xl font-bold line-clamp-1">Issued Books</h1>
-                <div className="flex flex-row space-x-1">
-                  <span className="opacity-90 text-sm font-medium tracking-tight">Total: 17</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Overdue Books */}
-            <div className="w-full flex flex-row space-x-3 bg-[#ff0000] text-white rounded-lg p-4">
-              <FaBookOpen className="w-8 h-8 opacity-80 my-auto" />
-              <div className="flex flex-col">
-                <h1 className="text-xl font-bold line-clamp-1">Overdue Books</h1>
-                <div className="flex flex-row space-x-1">
-                  <span className="opacity-90 text-sm font-medium tracking-tight">Total: 2</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        <AdminStatisticsOverviewCards />
 
         {/* Buttons for "Add Book", "Add Category" */}
         <div className="flex flex-col sm:flex-row space-y-3 sm:space-x-3 sm:space-y-0">
