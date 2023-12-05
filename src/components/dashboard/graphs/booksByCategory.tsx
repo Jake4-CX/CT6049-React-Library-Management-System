@@ -31,12 +31,23 @@ const BooksByCategoryGraph: React.FC = () => {
       });
     }
   }, [bookCategories.data, bookCategories.isLoading]);
-  
+
   const [chartData, setChartData] = useState(data);
 
   return (
     <div className="chart w-full h-full p-4">
-      <Pie data={chartData} options={options} />
+      {
+        bookCategories.isLoading ? (
+          <>
+            {/* Loading spinner */}
+            <div className="flex justify-center items-center w-full h-full">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+          </>
+        ) : (
+          <Pie data={chartData} options={options} />
+        )
+      }
     </div>
   )
 }

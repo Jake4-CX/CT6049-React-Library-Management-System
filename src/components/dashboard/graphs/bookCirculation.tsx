@@ -40,7 +40,18 @@ const BookCirculationGraph: React.FC = () => {
 
   return (
     <div className="chart w-full h-full p-4">
-      <Doughnut data={chartData} options={options} />
+      {
+        bookCirculation.isLoading ? (
+          <>
+            {/* Loading spinner */}
+            <div className="flex justify-center items-center w-full h-full">
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+            </div>
+          </>
+        ) : (
+          <Doughnut data={chartData} options={options} />
+        )
+      }
     </div>
   )
 }
