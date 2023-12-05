@@ -21,7 +21,7 @@ const LandingPage: React.FC = () => {
   return (
     <DefaultLayout>
       <HeroSection />
-      <div className="w-fit h-full lg:h-[58rem] bg-white p-[4%]">
+      <div className="w-fit h-full lg:min-h-[38rem] bg-white p-[4%]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
           {
             query.data && query.data.books.map((book, index) => (
