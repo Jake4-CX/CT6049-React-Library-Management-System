@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 const BooksByCategoryGraph: React.FC = () => {
 
   const bookCategories = useQuery({
-    queryKey: ["bookCategories"],
+    queryKey: ["bookCategoryStatistics"],
     cacheTime: 1000 * 60 * 5, // 5 minutes
     staleTime: 1000 * 60 * 5,
     queryFn: async () => {

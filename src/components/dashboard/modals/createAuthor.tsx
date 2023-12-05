@@ -2,7 +2,7 @@ import { Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import ErrorComponent from "../../global/error";
@@ -32,6 +32,8 @@ const CreateAuthorModal: React.FC<CreateAuthorModalProps> = (props) => {
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation({
     mutationKey: "addAuthor",
     mutationFn: createAuthor,
@@ -39,6 +41,8 @@ const CreateAuthorModal: React.FC<CreateAuthorModalProps> = (props) => {
       toast.success("Successfully created author!");
       props.closeCallback(false);
       console.log("Success: ", data);
+
+      queryClient.invalidateQueries([`bookAuthors`]);
     },
     onError: (error: AxiosError) => {
       toast.error("Error creating author!");

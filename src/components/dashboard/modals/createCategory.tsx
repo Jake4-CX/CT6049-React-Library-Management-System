@@ -2,7 +2,7 @@ import { Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCategory } from "../../../api/categories";
 import { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
@@ -31,6 +31,8 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = (props) => {
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation({
     mutationKey: "addCategory",
     mutationFn: createCategory,
@@ -38,6 +40,9 @@ const CreateCategoryModal: React.FC<CreateCategoryModalProps> = (props) => {
       toast.success("Successfully created category!");
       props.closeCallback(false);
       console.log("Success: ", data);
+
+      queryClient.invalidateQueries([`bookCategories`]);
+      queryClient.invalidateQueries([`bookCategoryStatistics`]);
     },
     onError: (error: AxiosError) => {
       toast.error("Error creating category!");
