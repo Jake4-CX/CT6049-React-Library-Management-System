@@ -12,8 +12,7 @@ export function validateUserAccessToken(accessToken: string) {
   return api.post(`/users/validate`, {},
     {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Database-Type": (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL"
+        Authorization: `Bearer ${accessToken}`
       }
     }
   );

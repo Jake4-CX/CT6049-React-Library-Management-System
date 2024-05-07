@@ -11,7 +11,6 @@ const api = axios.create({
 api.interceptors.request.use(
   async config => {
     const userTokens = getLocalStoredTokens();
-    const databaseType = (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL";
 
     if (userTokens) {
       config.headers['Authorization'] = `Bearer ${userTokens.accessToken}`;
@@ -19,7 +18,6 @@ api.interceptors.request.use(
 
     config.headers['Accept'] = 'application/json';
     config.headers['Content-Type'] = 'application/json';
-    config.headers['Database-Type'] = databaseType;
 
     return config;
   },
@@ -47,11 +45,10 @@ api.interceptors.response.use(
 
       try {
         // Request a new token using the refresh token
-        const { data }: { data: TokenDataType } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken: userTokens.refreshToken }, { headers: { 'Database-Type': (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL" } });
+        const { data }: { data: TokenDataType } = await axios.post(`${baseUrl}/users/refresh`, { refreshToken: userTokens.refreshToken }, { headers: {} });
 
         setLocalStoredTokens(data);
         originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
-        originalRequest.headers['Database-Type'] = (localStorage.getItem('databaseType') || "MongoDB") as "MongoDB" | "SQL";
         return api(originalRequest);
       } catch (refreshError) {
         // Handle the error, e.g. redirect to login, clear tokens etc.
